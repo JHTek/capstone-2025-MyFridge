@@ -1,0 +1,18 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/nav_category"
+        android:icon="@drawable/ic_category"
+        android:title="카테고리" />
+    <item
+        android:id="@+id/nav_refrigerator"
+        android:icon="@drawable/ic_refrigerator"
+        android:title="냉장고" />
+    <item
+        android:id="@+id/nav_recipe"
+        android:icon="@drawable/ic_add"
+        android:title="레시피"/>
+    <item
+        android:id="@+id/nav_mypage"
+        android:icon="@drawable/ic_mypage"
+        android:title="마이페이지" />
+</menu>
