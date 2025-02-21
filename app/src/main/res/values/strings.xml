@@ -4,4 +4,6 @@
     <string name="editPass_hint"><font size="14">8~15자 영문/숫자 조합으로 입력</font></string>
     <string name="editNick_hint"><font size="14">한글로입력</font></string>
     <string name="editPhone_hint"><font size="14">-제외 휴대폰 번호</font></string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

@@ -2,31 +2,40 @@ package com.example.refrigeratormanager
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.viewpager2.widget.ViewPager2
-import com.google.android.material.tabs.TabLayout
-import com.google.android.material.tabs.TabLayoutMediator
+import androidx.fragment.app.Fragment
+import com.example.refrigeratormanager.databinding.ActivityHomeBinding
 
 class HomeActivity : AppCompatActivity() {
-    private lateinit var tabLayout: TabLayout
-    private lateinit var viewPager: ViewPager2
-    private lateinit var adapter: RefrigeratorPagerAdapter
+    private lateinit var binding: ActivityHomeBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_home)
+        binding = ActivityHomeBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
-        tabLayout = findViewById(R.id.tabLayout)
-        viewPager = findViewById(R.id.viewPager)
+        // 기본 Fragment 설정
+        if (savedInstanceState == null) {
+            supportFragmentManager.beginTransaction()
+                .replace(R.id.fragmentContainer, HomeFragment())
+                .commit()
+        }
 
-        adapter = RefrigeratorPagerAdapter(this)
-        viewPager.adapter = adapter
-
-        TabLayoutMediator(tabLayout, viewPager) { tab, position ->
-            when (position) {
-                0 -> tab.text = "냉장"
-                1 -> tab.text = "냉동"
-                2 -> tab.text = "실온"
+        // 네비게이션 바 클릭 이벤트
+        binding.bottomNavigationView.setOnItemSelectedListener { item ->
+            when (item.itemId) {
+                R.id.nav_refrigerator -> replaceFragment(HomeFragment())
+                R.id.nav_category -> replaceFragment(CategoryFragment())
+                R.id.nav_recipe -> replaceFragment(RecipeFragment())
+                R.id.nav_mypage -> replaceFragment(MyPageFragment())
             }
-        }.attach()
+            true
+        }
+    }
+
+    private fun replaceFragment(fragment: Fragment) {
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.fragmentContainer, fragment)
+            .commit()
     }
 }
+
