@@ -37,14 +37,14 @@ class RefrigeratorDetailActivity : AppCompatActivity() {
             finish()
         }
 
-        // 검색 버튼 클릭 시 검색 화면으로 이동 (SearchActivity 예제)
+        // 검색 버튼 클릭 시 검색 화면으로 이동
         binding.btnSearch.setOnClickListener {
             val intent = Intent(this, SearchActivity::class.java)
             startActivity(intent)
         }
 
-        // 카메라 버튼 클릭 시 카메라 화면으로 이동 (CameraActivity 예제)
-        binding.fabOpenCamera.setOnClickListener {
+        // 카메라 버튼 클릭 시 카메라 화면으로 이동
+        binding.OpenCamera.setOnClickListener {
             val intent = Intent(this, CameraActivity::class.java)
             startActivity(intent)
         }
