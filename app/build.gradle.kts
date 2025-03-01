@@ -39,7 +39,17 @@ android {
 }
 
 dependencies {
+    // Material Components 명시적으로 추가
+    implementation("com.google.android.material:material:1.10.0")
     implementation("androidx.fragment:fragment-ktx:1.6.2")
+    // CameraX Core
+    implementation ("androidx.camera:camera-core:1.3.0")
+
+    // CameraX 라이브러리 추가
+    implementation ("androidx.camera:camera-camera2:1.3.0")
+    implementation ("androidx.camera:camera-lifecycle:1.3.0")
+    implementation ("androidx.camera:camera-view:1.3.0")
+
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)

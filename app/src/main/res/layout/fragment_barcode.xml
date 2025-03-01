@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/black">
+
+    <!-- 카메라 프리뷰 -->
+    <SurfaceView
+        android:id="@+id/cameraPreview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
+    <!-- 바코드 인식 결과 -->
+    <TextView
+        android:id="@+id/barcodeResult"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|center_horizontal"
+        android:text="바코드를 스캔하세요"
+        android:textColor="@android:color/white"
+        android:textSize="18sp"
+        android:padding="16dp"/>
+</FrameLayout>
