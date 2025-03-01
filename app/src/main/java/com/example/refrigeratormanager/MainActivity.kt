@@ -2,6 +2,7 @@ package com.example.refrigeratormanager
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
@@ -51,6 +52,13 @@ class MainActivity : AppCompatActivity() {
         apiService.login(user, pass).enqueue(object : Callback<LoginResponse> {
             override fun onResponse(call: Call<LoginResponse>, response: Response<LoginResponse>) {
                 if (response.isSuccessful && response.body()?.status == "success") {
+
+                    val loginResponse = response.body()//로그
+                    val token = response.headers()["Authorization"]?.replace("Bearer ", "") // JWT 토큰
+                    saveToken(token)
+
+                    Log.d("MainActivity", "헤더에서 받은 토큰: $token")//로그
+
                     Toast.makeText(this@MainActivity, "로그인 성공!", Toast.LENGTH_SHORT).show()
                     startActivity(Intent(this@MainActivity, HomeActivity::class.java))
                 } else {
@@ -62,5 +70,13 @@ class MainActivity : AppCompatActivity() {
                 Toast.makeText(this@MainActivity, "서버 연결 실패: ${t.message}", Toast.LENGTH_SHORT).show()
             }
         })
+    }
+    private fun saveToken(token: String?) {
+        val sharedPreferences = getSharedPreferences("app_preferences", MODE_PRIVATE)
+        val editor = sharedPreferences.edit()
+        editor.putString("JWT_TOKEN", token)
+        editor.apply()
+
+        Log.d("MainActivity", "Token saved: $token")
     }
 }
