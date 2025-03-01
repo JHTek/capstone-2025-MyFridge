@@ -42,15 +42,24 @@ public class JWTFilter extends OncePerRequestFilter{
 		String token = authorization.split(" ")[1];
 		
 		//소멸시간 검증
-		try {
-		    jwtUtil.isExpired(token);
-		} catch (ExpiredJwtException e) {
-		    
-		    System.out.println("token expired");
-
-		    filterChain.doFilter(request, response);
-		    return;
-		}
+	    try {
+	        if (jwtUtil.isExpired(token)) {
+	            System.out.println("token expired");
+	            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED); // 401 Unauthorized
+	            response.getWriter().write("Token has expired");
+	            return;
+	        }
+	    } catch (ExpiredJwtException e) {
+	        System.out.println("token expired");
+	        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED); // 401 Unauthorized
+	        response.getWriter().write("Token has expired");
+	        return;
+	    } catch (Exception e) {
+	        System.out.println("Invalid token");
+	        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED); // 401 Unauthorized
+	        response.getWriter().write("Invalid token");
+	        return;
+	    }
 		
         String userid = jwtUtil.getUserid(token);
         String role = jwtUtil.getRole(token);

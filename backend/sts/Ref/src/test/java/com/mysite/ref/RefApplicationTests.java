@@ -3,8 +3,8 @@ package com.mysite.ref;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import com.mysite.ref.user.UsersRepository;
 import com.mysite.ref.user.Users;
+import com.mysite.ref.user.UsersRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
