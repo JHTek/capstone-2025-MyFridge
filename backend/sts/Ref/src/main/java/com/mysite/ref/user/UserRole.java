@@ -1,4 +1,4 @@
-package com.mysite.ref.user;
+/*package com.mysite.ref.user;
 
 import lombok.Getter;
 
@@ -12,3 +12,4 @@ public enum UserRole {
 	}
 	private String value;
 }
+*/

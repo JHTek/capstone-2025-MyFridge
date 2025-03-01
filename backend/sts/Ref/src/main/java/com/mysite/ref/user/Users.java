@@ -1,9 +1,14 @@
 package com.mysite.ref.user;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import com.mysite.ref.refrigerator.UserRefC;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
-
+import jakarta.persistence.OneToMany;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -19,5 +24,8 @@ public class Users {
 	private String password;
 	
 	private String role;
+	
+	@OneToMany(mappedBy = "user")
+	private List<UserRefC> userRefC = new ArrayList<>();
 	
 }
