@@ -18,4 +18,7 @@ public class ApiClient {
         }
         return retrofit;
     }
+    public static RefrigeratorApi getRefrigeratorApi() {
+        return getClient().create(RefrigeratorApi.class);
+    }
 }

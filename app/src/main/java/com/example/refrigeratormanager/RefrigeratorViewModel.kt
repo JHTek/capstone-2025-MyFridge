@@ -1,10 +1,13 @@
 package com.example.refrigeratormanager
 
 
+import android.util.Log
 import android.widget.Toast
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Response
 import retrofit2.Callback
@@ -20,27 +23,46 @@ class RefrigeratorViewModel : ViewModel() {
     private val _errorMessage = MutableLiveData<String?>()
     val errorMessage: LiveData<String?> get() = _errorMessage
 
+    fun loadRefrigerators(token: String) {
+        viewModelScope.launch {
+            _loading.value = true // 로딩 시작
+            try {
+                val response = ApiClient.getRefrigeratorApi().getRefrigerators(token)
+                if (response.isSuccessful) {
+                    Log.d("RefrigeratorViewModel", "성공: ${response.body()}")
+                    _refrigeratorList.value = response.body() // 냉장고 목록 업데이트
+                } else {
+                    _errorMessage.value = "냉장고 목록 불러오기 실패: ${response.message()}"
+                }
+            } catch (e: Exception) {
+                _errorMessage.value = "네트워크 오류: ${e.message}"
+            } finally {
+                _loading.value = false // 로딩 종료
+            }
+        }
+    }
+
     fun createRefrigerator(name: String, token: String) {
 
         val refrigeratorDTO = RefrigeratorDTO(name)
 
         val apiService = ApiClient.getClient().create(RefrigeratorApi::class.java)
         apiService.createRefrigerator(token, refrigeratorDTO).enqueue(object : Callback<String> {
+
             override fun onResponse(call: Call<String>, response: Response<String>) {
                 if (response.isSuccessful) {
-                    // 성공적으로 냉장고가 추가된 경우 UI 업데이트
-                    val updatedList = _refrigeratorList.value.orEmpty() + Refrigerator(name)
-                    _refrigeratorList.value = updatedList
+                    // 냉장고 추가 성공 시 목록 다시 불러오기
+                    loadRefrigerators(token)
+
                 } else {
-                    // 실패 시 error 메시지를 전달
-                    _refrigeratorList.value = listOf() // 실패 처리 후 빈 리스트로 설정
+                    _errorMessage.value = "냉장고 생성 실패: ${response.message()}"
                 }
             }
-
             override fun onFailure(call: Call<String>, t: Throwable) {
-                _refrigeratorList.value = listOf() // 실패 처리 후 빈 리스트로 설정
+                _errorMessage.value = "네트워크 오류: ${t.message}"
             }
         })
     }
+
 }
 

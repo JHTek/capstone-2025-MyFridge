@@ -47,13 +47,8 @@ class HomeFragment : Fragment() {
 
         // LiveData 관찰하여 데이터 변경 감지
         viewModel.refrigeratorList.observe(viewLifecycleOwner) { list ->
-            refrigeratorAdapter.submitList(list.toList()) // UI 업데이트
+            refrigeratorAdapter.submitList(list) // UI 업데이트
             // 냉장고 리스트가 변경되었을 때 Toast 표시
-            if (list.isNotEmpty()) {
-                Toast.makeText(requireContext(), "냉장고가 추가되었습니다!", Toast.LENGTH_SHORT).show()
-            } else {
-                Toast.makeText(requireContext(), "오류가 발생했습니다.", Toast.LENGTH_SHORT).show()
-            }
         }
 
         // 냉장고 추가 버튼 클릭 이벤트
