@@ -7,6 +7,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.mysite.ref.dto.RefrigeratorDTO;
+import com.mysite.ref.dto.RefrigeratorResponseDTO;
 import com.mysite.ref.user.JWTUtil;
 import com.mysite.ref.user.Users;
 import com.mysite.ref.user.UsersRepository;

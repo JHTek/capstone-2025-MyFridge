@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.mysite.ref.dto.RefrigeratorDTO;
+import com.mysite.ref.dto.RefrigeratorResponseDTO;
 import com.mysite.ref.user.JWTUtil;
 import com.mysite.ref.user.UsersService;
 
