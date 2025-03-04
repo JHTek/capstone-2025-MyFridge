@@ -1,4 +1,4 @@
-package com.mysite.ref.user;
+package com.mysite.ref.dto;
 
 import lombok.Getter;
 import lombok.Setter;

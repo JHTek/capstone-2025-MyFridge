@@ -3,6 +3,9 @@ package com.mysite.ref.refrigerator;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.mysite.ref.ingredients.Ingredients;
+
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -25,5 +28,8 @@ public class Refrigerator {
 
     @OneToMany(mappedBy = "refrigerator")
     private List<UserRefC> userRefC = new ArrayList<>();
+    
+    @OneToMany(mappedBy = "refrigerator",cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Ingredients> ingredients = new ArrayList<>();;
     
 }
