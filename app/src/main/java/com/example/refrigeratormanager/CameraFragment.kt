@@ -207,15 +207,7 @@ class CameraFragment : Fragment() {
     }
 
     private fun moveToProductUpload(serverResponse: String) {
-        //val productMap = parseServerResponse(serverResponse) // ✅ JSON을 Map으로 변환
-
-        //테스트용 코드
-        val productMap = mapOf(
-            "Apple" to 3,
-            "Banana" to 5,
-            "Tomato" to 2
-        )
-        //테스트용 코드
+        val productMap = parseServerResponse(serverResponse) // ✅ JSON을 Map으로 변환
 
         val productUploadFragment = ProductUploadFragment().apply {
             arguments = Bundle().apply {
