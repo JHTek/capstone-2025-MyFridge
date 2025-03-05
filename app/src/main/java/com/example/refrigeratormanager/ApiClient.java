@@ -1,5 +1,7 @@
 package com.example.refrigeratormanager;
 
+import com.example.refrigeratormanager.api.IngredientApi;
+
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.converter.scalars.ScalarsConverterFactory;
@@ -20,5 +22,8 @@ public class ApiClient {
     }
     public static RefrigeratorApi getRefrigeratorApi() {
         return getClient().create(RefrigeratorApi.class);
+    }
+    public static IngredientApi getIngredientApi() {
+        return retrofit.create(IngredientApi.class);
     }
 }
