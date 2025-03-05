@@ -9,9 +9,9 @@ import retrofit2.http.POST
 
 interface IngredientApi {
     @POST("/ingredients/add")
-    fun uploadIngredient(
+    fun uploadIngredients(
         @Header("Authorization") token: String,
-        @Body ingredientRequest: IngredientRequestDTO
+        @Body ingredientRequests: List<IngredientRequestDTO>
     ): Call<ApiResponse>
 
 
