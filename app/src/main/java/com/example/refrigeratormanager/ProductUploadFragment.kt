@@ -21,8 +21,6 @@ class ProductUploadFragment : DialogFragment() {
 
     private val productFields = mutableListOf<LinearLayout>() // 동적으로 생성되는 상품 입력 필드를 저장할 리스트
 
-    private var productNameFromManualInput: String? = null // 상품명 받아오기
-
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         _binding = FragmentProductUploadBinding.inflate(LayoutInflater.from(context))
 
@@ -34,7 +32,7 @@ class ProductUploadFragment : DialogFragment() {
     }
 
     private fun setupUI() {
-        val productName = arguments?.getString("productName") ?: ""
+        val productName = arguments?.getString("productName") ?: "" //상품명 받아오기
         binding.productNameEditText.setText(productName)
         binding.quantityEditText.setText("1") // 기본 수량 설정
 
