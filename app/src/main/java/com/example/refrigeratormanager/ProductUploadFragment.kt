@@ -172,7 +172,7 @@ class ProductUploadFragment : DialogFragment() {
 
         binding.addProductButton.setOnClickListener { addProductField(true) } // 추가 버튼 클릭 시 새로운 상품 등록 필드 추가
     }
-
+    private val refrigeratorIdMap = mutableMapOf<View, Int?>() //동적필드용 냉장고 매핑
     // 제품 업로드 처리
     private fun uploadProduct() {
         val selectedRefrigeratorId = selectedRefrigeratorId
@@ -216,13 +216,15 @@ class ProductUploadFragment : DialogFragment() {
             val expirationDateInput = productField.findViewById<EditText>(R.id.expirationDateEditText)
             val storageLocationSpinner = productField.findViewById<Spinner>(R.id.storageTypeSpinner)
 
+
             val ingredientsName = productNameInput.text.toString().trim()
             val quantity = quantityInput.text.toString().trim().toIntOrNull()
             val expirationDate = expirationDateInput.text.toString().trim()
             val storageLocation = storageLocationSpinner.selectedItemPosition
+            val selectedRefrigeratorId = refrigeratorIdMap[productField]
 
             // 유효성 검사
-            if (ingredientsName.isEmpty() || quantity == null || expirationDate.isEmpty()) {
+            if (ingredientsName.isEmpty() || quantity == null || expirationDate.isEmpty() || selectedRefrigeratorId == null) {
                 Toast.makeText(requireContext(), "모든 정보를 입력하세요.", Toast.LENGTH_SHORT).show()
                 return
             }
@@ -260,10 +262,26 @@ class ProductUploadFragment : DialogFragment() {
         refrigeratorAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         refrigeratorSpinner.adapter = refrigeratorAdapter
 
+        // 냉장고 Spinner에 리스너 추가
+        var selectedRefrigeratorId: Int? = null // 동적 필드의 냉장고 ID 저장
+        refrigeratorSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                selectedRefrigeratorId = refrigerators.getOrNull(position)?.id // 선택된 냉장고 ID 저장
+                refrigeratorIdMap[newProductField] = selectedRefrigeratorId // 맵에 저장
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+                selectedRefrigeratorId = null
+                refrigeratorIdMap[newProductField] = null // 맵에 null 저장
+            }
+        }
+
         // 저장 타입 선택 (동적 스피너 설정)
         val storageAdapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, storageTypes)
         storageAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         storageTypeSpinner.adapter = storageAdapter
+
+
 
         // 유통기한 설정 (기본으로 비워두고, 필요시 선택할 수 있음)
         expirationDateEditText.setText("") // 기본 유통기한 비워둠
