@@ -33,7 +33,7 @@ public class IngredientsController {
 		    return ResponseEntity.ok(response);
     }
 	@GetMapping("/refrigerator/{refrigeratorId}")
-	public ResponseEntity<List<IngredientResponseDTO>> getIngredientsByRefrigeratorId(@PathVariable int refrigeratorId) {
+	public ResponseEntity<List<IngredientResponseDTO>> getIngredientsByRefrigeratorId(@PathVariable("refrigeratorId") int refrigeratorId) {
 		List<IngredientResponseDTO> ingredients = ingredientsService.getIngredientsByRefrigeratorId(refrigeratorId);
 		return ResponseEntity.ok(ingredients);
 	}
