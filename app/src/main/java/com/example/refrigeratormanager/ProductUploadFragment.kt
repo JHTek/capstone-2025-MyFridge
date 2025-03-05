@@ -5,6 +5,7 @@ import android.app.DatePickerDialog
 import android.app.Dialog
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.*
@@ -48,14 +49,35 @@ class ProductUploadFragment : DialogFragment() {
     }
 
     private fun setupUI() {
+        val productMap = arguments?.getSerializable("productData") as? Map<String, Int> ?: emptyMap()
         val productName = arguments?.getString("productName") ?: "" //상품명 받아오기
-        binding.productNameEditText.setText(productName)
-        binding.quantityEditText.setText("1") // 기본 수량 설정
+        // ✅ Log로 받은 데이터 확인
+        Log.d("ProductUploadFragment", "받은 데이터: $productMap")
 
+        // ✅ 기존 등록 필드 초기화
+        binding.productFieldsContainer.removeAllViews()
+        productFields.clear()
+
+        val productList = productMap.entries.toList()
+
+        if (productList.isNotEmpty()) {
+            // ✅ 첫 번째 상품은 기존 필드를 사용
+            val firstEntry = productList.first()
+            binding.productNameEditText.setText(firstEntry.key)
+            binding.quantityEditText.setText(firstEntry.value.toString())
+
+            // ✅ 두 번째 상품부터 동적으로 추가
+            productList.drop(1).forEach { (name, quantity) ->
+                addProductField(true, name, quantity)
+            }
+        } else {
+            // ✅ 데이터가 없을 경우 기본 필드 추가
+            binding.productNameEditText.setText(productName)
+            binding.quantityEditText.setText("1") // 기본 수량 설정
+        }
         loadUserRefrigerators()
         setupStorageTypeSpinner()
         setupEventListeners()
-
         // 기본 상품 필드 추가
         addProductField(false)
     }
@@ -161,7 +183,7 @@ class ProductUploadFragment : DialogFragment() {
         binding.addProductButton.setOnClickListener { addProductField(true) } // 추가 버튼 클릭 시 새로운 상품 등록 필드 추가
     }
 
-    private fun addProductField(isVisible: Boolean) {
+    private fun addProductField(isVisible: Boolean, productName: String = "", quantity: Int = 1) {
         val inflater = LayoutInflater.from(requireContext())
         val newProductField = inflater.inflate(R.layout.layout_product_input, binding.productFieldsContainer, false)
 
@@ -169,6 +191,7 @@ class ProductUploadFragment : DialogFragment() {
         val refrigeratorSpinner = newProductField.findViewById<Spinner>(R.id.refrigeratorSpinner)
         val storageTypeSpinner = newProductField.findViewById<Spinner>(R.id.storageTypeSpinner)
         val expirationDateEditText = newProductField.findViewById<EditText>(R.id.expirationDateEditText)
+        val calendarButton = newProductField.findViewById<ImageButton>(R.id.calendarButton)
         val productNameEditText = newProductField.findViewById<EditText>(R.id.productNameEditText)
         val quantityEditText = newProductField.findViewById<EditText>(R.id.quantityEditText)
 
@@ -187,17 +210,15 @@ class ProductUploadFragment : DialogFragment() {
         storageAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         storageTypeSpinner.adapter = storageAdapter
 
+        // ✅ 상품 정보 자동 입력 (기본값: 빈 값, 수량 1)
+        productNameEditText.setText(productName)
+        quantityEditText.setText(quantity.toString())
+
         // 유통기한 설정 (기본으로 비워두고, 필요시 선택할 수 있음)
-        expirationDateEditText.setText("") // 기본 유통기한 비워둠
+        expirationDateEditText.setText("")
+        calendarButton.setOnClickListener { showDatePickerDialog(expirationDateEditText) }
 
-        // 상품 이름, 수량 필드 비워둠
-        productNameEditText.setText("")
-        quantityEditText.setText("1")
-
-        // 유통기한 선택
-        expirationDateEditText.setOnClickListener { showDatePickerDialog(expirationDateEditText) }
-
-        // 필드가 표시되어야 할 경우에만 추가
+        // ✅ 필드가 표시되어야 할 경우에만 추가
         if (isVisible) {
             binding.productFieldsContainer.addView(newProductField)
             productFields.add(newProductField as LinearLayout) // 동적 필드 리스트에 추가
