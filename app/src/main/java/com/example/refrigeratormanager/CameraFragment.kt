@@ -14,18 +14,48 @@ import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.example.refrigeratormanager.databinding.FragmentCameraBinding
+import okhttp3.MultipartBody
+import okhttp3.ResponseBody
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
+import android.app.AlertDialog
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.OkHttpClient
+import okhttp3.RequestBody.Companion.asRequestBody
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import retrofit2.http.Body
+import retrofit2.http.Multipart
+import retrofit2.http.POST
+import retrofit2.http.Part
+//import com.example.myapp.BuildConfig
+
+interface ApiService {
+    @Multipart
+    @POST("detect") // 🔹 Flask 서버의 엔드포인트 경로
+    fun uploadImage(
+        @Part image: MultipartBody.Part
+    ): Call<ResponseBody>
+
+//    @POST("/ingredients/add")
+//    fun addIngredients(@Body ingredientsDtoList: List<IngredientRequestDTO>): Call<ResponseBody>
+}
 
 class CameraFragment : Fragment() {
     private var _binding: FragmentCameraBinding? = null
     private val binding get() = _binding!!
+    private var serverResponse: String? = null  // ✅ 서버 응답을 저장할 변수 추가
 
     private lateinit var cameraExecutor: ExecutorService
     private var imageCapture: ImageCapture? = null
+    private var photoFile: File? = null // ✅ 전역 변수로 이동
+    //private val baseUrl = "http://${BuildConfig.SERVER_IP}:5000/"
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -40,14 +70,13 @@ class CameraFragment : Fragment() {
 
         cameraExecutor = Executors.newSingleThreadExecutor()
 
-        // ✅ 권한 확인 후 카메라 실행
         if (allPermissionsGranted()) {
             startCamera()
         } else {
             requestPermissionLauncher.launch(Manifest.permission.CAMERA)
         }
 
-        //   촬영 버튼 클릭 리스너 추가
+        // ✅ 촬영 버튼 클릭 시 사진 촬영 및 서버 전송
         binding.btnCapture.setOnClickListener {
             takePhoto()
         }
@@ -59,7 +88,6 @@ class CameraFragment : Fragment() {
         cameraProviderFuture.addListener({
             val cameraProvider: ProcessCameraProvider = cameraProviderFuture.get()
 
-            // 📸 이미지 캡처 설정
             imageCapture = ImageCapture.Builder().build()
 
             val preview = Preview.Builder().build().also {
@@ -79,25 +107,26 @@ class CameraFragment : Fragment() {
         }, ContextCompat.getMainExecutor(requireContext()))
     }
 
-    //  사진 촬영 기능
+    // ✅ 사진 촬영 및 즉시 서버 전송
     private fun takePhoto() {
         val imageCapture = imageCapture ?: return
 
-        // 저장할 파일 생성
-        val photoFile = File(
+        photoFile = File(
             requireContext().externalMediaDirs.firstOrNull(),
             SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US).format(System.currentTimeMillis()) + ".jpg"
         )
 
-        val outputOptions = ImageCapture.OutputFileOptions.Builder(photoFile).build()
+        val outputOptions = ImageCapture.OutputFileOptions.Builder(photoFile!!).build()
 
-        // 사진 촬영 후 저장
         imageCapture.takePicture(
             outputOptions,
             ContextCompat.getMainExecutor(requireContext()),
             object : ImageCapture.OnImageSavedCallback {
                 override fun onImageSaved(outputFileResults: ImageCapture.OutputFileResults) {
-                    Toast.makeText(requireContext(), "사진 저장됨: ${photoFile.absolutePath}", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireContext(), "사진 저장됨", Toast.LENGTH_SHORT).show()
+
+                    // ✅ 촬영 후 서버에 업로드
+                    uploadPhoto(photoFile!!)
                 }
 
                 override fun onError(exception: ImageCaptureException) {
@@ -107,7 +136,47 @@ class CameraFragment : Fragment() {
         )
     }
 
-    //  권한 요청
+    // ✅ 서버로 사진 업로드
+    private fun uploadPhoto(photoFile: File) {
+        val requestBody = photoFile.asRequestBody("image/jpeg".toMediaTypeOrNull())
+        val multipartBody = MultipartBody.Part.createFormData("image", photoFile.name, requestBody)
+
+        val retrofit = Retrofit.Builder()
+            .baseUrl("http://10.0.2.2:5000/") // 🔹 서버 URL 설정
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+
+        val apiService = retrofit.create(ApiService::class.java)
+
+        apiService.uploadImage(multipartBody).enqueue(object : Callback<ResponseBody> {
+            override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
+                if (response.isSuccessful) {
+                    response.body()?.string()?.let { jsonResponse ->
+                        serverResponse = jsonResponse  // ✅ 서버 응답 저장 문자열 형태, 객체 : 수량 형식
+                        Log.d("CameraFragment", "서버 응답: $serverResponse")
+                        showResponseDialog("업로드 성공", serverResponse!!) // ✅ 다이얼로그로 표시
+                    }
+                } else {
+                    Log.e("CameraFragment", "서버 응답 실패: ${response.code()}")
+                    showResponseDialog("업로드 실패", "서버 오류: ${response.code()}")
+                }
+            }
+
+            override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+                Log.e("CameraFragment", "사진 업로드 실패", t)
+                showResponseDialog("업로드 실패", "네트워크 오류: ${t.localizedMessage}")
+            }
+        })
+    }
+
+    private fun showResponseDialog(title: String, message: String) {
+        AlertDialog.Builder(requireContext())
+            .setTitle(title)
+            .setMessage(message)
+            .setPositiveButton("확인") { dialog, _ -> dialog.dismiss() }
+            .show()
+    }
+
     private val requestPermissionLauncher = registerForActivityResult(
         ActivityResultContracts.RequestPermission()
     ) { isGranted: Boolean ->

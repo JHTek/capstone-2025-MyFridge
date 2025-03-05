@@ -6,6 +6,7 @@ plugins {
 android {
     namespace = "com.example.refrigeratormanager"
     compileSdk = 35
+
     buildFeatures {
         viewBinding = true
     }
@@ -41,7 +42,21 @@ android {
 dependencies {
     // Material Components 명시적으로 추가
     implementation("com.google.android.material:material:1.10.0")
+    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.2")
     implementation("androidx.fragment:fragment-ktx:1.6.2")
+
+    // AndroidX 관련
+    implementation("androidx.appcompat:appcompat:1.6.1")
+    implementation("androidx.core:core-ktx:1.9.0")
+
+    // OkHttp (파일 업로드를 위한 Multipart 지원)
+    implementation("com.squareup.okhttp3:okhttp:4.9.3")
+    implementation("com.squareup.okhttp3:logging-interceptor:4.9.3")
+
+    // Retrofit & Converter
+    implementation("com.squareup.retrofit2:retrofit:2.9.0")
+    implementation("com.squareup.retrofit2:converter-gson:2.9.0")
+
     // CameraX Core
     implementation ("androidx.camera:camera-core:1.3.0")
 

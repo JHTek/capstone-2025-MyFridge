@@ -1,0 +1,105 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:layout_marginTop="20dp"
+    android:divider="?android:attr/dividerVertical"
+    android:dividerPadding="8dp">
+
+    <!-- 냉장고 선택 Spinner -->
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="냉장고 선택"
+        android:textSize="16sp"
+        android:textColor="#aaaaaa"
+        android:paddingBottom="5dp"/>
+
+    <Spinner
+        android:id="@+id/refrigeratorSpinner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:spinnerMode="dialog"
+        android:background="@drawable/input_background"
+        android:padding="10dp"
+        android:prompt="@string/refrigerator_prompt"/>
+
+    <!-- 보관 방식 Spinner -->
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="보관 방식"
+        android:textSize="16sp"
+        android:textColor="#aaaaaa"
+        android:paddingTop="10dp"
+        android:paddingBottom="5dp"/>
+
+    <Spinner
+        android:id="@+id/storageTypeSpinner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/input_background"
+        android:padding="10dp"/>
+
+    <!-- 상품명 입력 -->
+    <EditText
+        android:id="@+id/productNameEditText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="상품명을 입력하세요"
+        android:padding="10dp"
+        android:textColor="@color/black"
+        android:background="@drawable/input_background"
+        android:layout_marginTop="10dp"/>
+
+    <!-- 수량 및 유통기한 입력 -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:layout_marginTop="10dp">
+
+        <EditText
+            android:id="@+id/quantityEditText"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:hint="수량"
+            android:inputType="number"
+            android:padding="10dp"
+            android:textColor="@color/black"
+            android:background="@drawable/input_background"/>
+
+        <Space
+            android:layout_width="10dp"
+            android:layout_height="wrap_content"/>
+
+        <EditText
+            android:id="@+id/expirationDateEditText"
+            android:layout_width="0dp"
+            android:layout_weight="2"
+            android:layout_height="wrap_content"
+            android:hint="유통기한 선택"
+            android:padding="10dp"
+            android:textColor="@color/black"
+            android:background="@drawable/input_background"
+            android:focusable="false"/>
+
+        <ImageButton
+            android:id="@+id/calendarButton"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:background="?android:selectableItemBackground"
+            android:src="@android:drawable/ic_menu_my_calendar"
+            android:layout_marginStart="10dp"/>
+    </LinearLayout>
+
+    <!-- 구분선 추가 -->
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@android:color/darker_gray"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"/>
+</LinearLayout>
