@@ -24,9 +24,11 @@ import java.util.*
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 import android.app.AlertDialog
+import androidx.viewpager2.widget.ViewPager2
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.OkHttpClient
 import okhttp3.RequestBody.Companion.asRequestBody
+import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -113,7 +115,10 @@ class CameraFragment : Fragment() {
 
         photoFile = File(
             requireContext().externalMediaDirs.firstOrNull(),
-            SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US).format(System.currentTimeMillis()) + ".jpg"
+            SimpleDateFormat(
+                "yyyyMMdd_HHmmss",
+                Locale.US
+            ).format(System.currentTimeMillis()) + ".jpg"
         )
 
         val outputOptions = ImageCapture.OutputFileOptions.Builder(photoFile!!).build()
@@ -152,9 +157,13 @@ class CameraFragment : Fragment() {
             override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
                 if (response.isSuccessful) {
                     response.body()?.string()?.let { jsonResponse ->
-                        serverResponse = jsonResponse  // ✅ 서버 응답 저장 문자열 형태, 객체 : 수량 형식
+                        serverResponse = jsonResponse  // ✅ 서버 응답 저장
                         Log.d("CameraFragment", "서버 응답: $serverResponse")
-                        showResponseDialog("업로드 성공", serverResponse!!) // ✅ 다이얼로그로 표시
+
+                        showResponseDialog("업로드 성공", serverResponse!!) {
+                            // ✅ 서버 응답과 함께 페이지 이동
+                            moveToProductUpload(serverResponse!!)
+                        }
                     }
                 } else {
                     Log.e("CameraFragment", "서버 응답 실패: ${response.code()}")
@@ -196,4 +205,52 @@ class CameraFragment : Fragment() {
         _binding = null
         cameraExecutor.shutdown()
     }
+
+    private fun moveToProductUpload(serverResponse: String) {
+        //val productMap = parseServerResponse(serverResponse) // ✅ JSON을 Map으로 변환
+
+        //테스트용 코드
+        val productMap = mapOf(
+            "Apple" to 3,
+            "Banana" to 5,
+            "Tomato" to 2
+        )
+        //테스트용 코드
+
+        val productUploadFragment = ProductUploadFragment().apply {
+            arguments = Bundle().apply {
+                putSerializable("productData", HashMap(productMap)) // ✅ Map을 Bundle에 저장
+            }
+        }
+
+        productUploadFragment.show(parentFragmentManager, "ProductUploadFragment")
+    }
+
+
+    private fun showResponseDialog(title: String, message: String, onDismiss: (() -> Unit)? = null) {
+        AlertDialog.Builder(requireContext())
+            .setTitle(title)
+            .setMessage(message)
+            .setPositiveButton("확인") { _, _ ->
+                onDismiss?.invoke() // ✅ 다이얼로그가 닫힐 때 실행할 함수 호출
+            }
+            .show()
+    }
+
+    // ✅ JSON을 Map<String, Int>로 변환하는 함수 추가
+    private fun parseServerResponse(response: String): Map<String, Int> {
+        return try {
+            val jsonObject = JSONObject(response)
+            val resultMap = mutableMapOf<String, Int>()
+
+            jsonObject.keys().forEach { key ->
+                resultMap[key] = jsonObject.getInt(key)
+            }
+            resultMap
+        } catch (e: Exception) {
+            Log.e("CameraFragment", "JSON 파싱 오류", e)
+            emptyMap()
+        }
+    }
+
 }
