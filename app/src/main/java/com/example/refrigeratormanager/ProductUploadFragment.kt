@@ -109,6 +109,7 @@ class ProductUploadFragment : DialogFragment() {
         val refrigeratorSpinner = newProductField.findViewById<Spinner>(R.id.refrigeratorSpinner)
         val storageTypeSpinner = newProductField.findViewById<Spinner>(R.id.storageTypeSpinner)
         val expirationDateEditText = newProductField.findViewById<EditText>(R.id.expirationDateEditText)
+        val calendarButton = newProductField.findViewById<ImageButton>(R.id.calendarButton)
         val productNameEditText = newProductField.findViewById<EditText>(R.id.productNameEditText)
         val quantityEditText = newProductField.findViewById<EditText>(R.id.quantityEditText)
 
@@ -135,7 +136,7 @@ class ProductUploadFragment : DialogFragment() {
         quantityEditText.setText("1")
 
         // 유통기한 선택
-        expirationDateEditText.setOnClickListener { showDatePickerDialog(expirationDateEditText) }
+        calendarButton.setOnClickListener { showDatePickerDialog(expirationDateEditText) }
 
         // 필드가 표시되어야 할 경우에만 추가
         if (isVisible) {
