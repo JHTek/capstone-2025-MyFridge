@@ -136,20 +136,26 @@ class ProductUploadFragment : DialogFragment() {
         return listOf() // 실제 구현 필요
     }
 
-    // 유통기한 선택 다이얼로그 표시
-    private fun showDatePickerDialog(editText: EditText) {
+    // 날짜 선택 다이얼로그
+    private fun showDatePickerDialog(expirationDateInput: EditText) {
         val calendar = Calendar.getInstance()
         val year = calendar.get(Calendar.YEAR)
         val month = calendar.get(Calendar.MONTH)
         val day = calendar.get(Calendar.DAY_OF_MONTH)
 
-        val datePickerDialog =
-            DatePickerDialog(requireContext(), { _, selectedYear, selectedMonth, selectedDay ->
-                val selectedDate = "$selectedYear-${selectedMonth + 1}-$selectedDay"
-                editText.setText(selectedDate)
-            }, year, month, day)
-
-        datePickerDialog.show()
+        val datePicker = DatePickerDialog(
+            requireContext(),
+            { _, selectedYear, selectedMonth, selectedDay ->
+                val formattedDate = String.format("%04d-%02d-%02d", selectedYear, selectedMonth + 1, selectedDay)
+                expirationDateInput.setText(formattedDate)
+            },
+            year,
+            month,
+            day
+        )
+        // 현재 날짜 이전 선택 불가능하게 설정
+        datePicker.datePicker.minDate = System.currentTimeMillis()
+        datePicker.show()
     }
     //리뷰
     private var selectedRefrigeratorId: Int? = null
@@ -221,8 +227,8 @@ class ProductUploadFragment : DialogFragment() {
         // ✅ 필드가 표시되어야 할 경우에만 추가
         if (isVisible) {
             binding.productFieldsContainer.addView(newProductField)
-            productFields.add(newProductField as LinearLayout) // 동적 필드 리스트에 추가
         }
+        productFields.add(newProductField as LinearLayout) // 동적 필드 리스트에 추가
     }
     // 제품 업로드 처리
     private fun uploadProduct() {
