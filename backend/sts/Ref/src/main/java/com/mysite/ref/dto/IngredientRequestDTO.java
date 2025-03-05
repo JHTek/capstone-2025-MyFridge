@@ -12,7 +12,12 @@ public class IngredientRequestDTO {
 	private int refrigeratorId;
 	private String ingredientsName;
 	private int quantity;
-	private LocalDate expirationDate;
+	private String expirationDate;
 	private int storageLocation;
 	private int classId;
+
+	public LocalDate getExpirationDateAsLocalDate() {
+        return LocalDate.parse(expirationDate); // "yyyy-MM-dd" 형식으로 파싱
+    }
 }
+
