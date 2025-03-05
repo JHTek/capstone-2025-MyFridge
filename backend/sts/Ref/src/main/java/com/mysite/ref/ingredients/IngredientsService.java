@@ -1,11 +1,13 @@
 package com.mysite.ref.ingredients;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.mysite.ref.dto.IngredientRequestDTO;
+import com.mysite.ref.dto.IngredientResponseDTO;
 import com.mysite.ref.refrigerator.Refrigerator;
 import com.mysite.ref.refrigerator.RefrigeratorRepository;
 
@@ -34,7 +36,7 @@ public class IngredientsService {
             Ingredients ingredient = new Ingredients();
             ingredient.setIngredientsName(dto.getIngredientsName());
             ingredient.setQuantity(dto.getQuantity());
-            ingredient.setExpirationDate(dto.getExpirationDate());
+            ingredient.setExpirationDate(dto.getExpirationDateAsLocalDate());
             ingredient.setStorageLocation(dto.getStorageLocation());
             ingredient.setRefrigerator(refrigerator);
             //ingredient.setType(type);
@@ -43,5 +45,22 @@ public class IngredientsService {
             ingredientsRepository.save(ingredient);
         }
     }
+	
+	@Transactional(readOnly = true)
+	public List<IngredientResponseDTO> getIngredientsByRefrigeratorId(int refrigeratorId) {
+		List<Ingredients> ingredients = ingredientsRepository.findByRefrigeratorRefrigeratorId(refrigeratorId);
+		return ingredients.stream()
+				.map(ingredient -> {
+					IngredientResponseDTO dto = new IngredientResponseDTO();
+					dto.setIngredientsId(ingredient.getIngredientsId());
+					dto.setIngredientsName(ingredient.getIngredientsName());
+					dto.setQuantity(ingredient.getQuantity());
+					dto.setExpirationDate(ingredient.getExpirationDate());
+					dto.setStorageLocation(ingredient.getStorageLocation());
+					dto.setRefrigeratorName(ingredient.getRefrigerator().getRefrigeratorName()); // Refrigerator 엔티티의 이름을 가져옴
+					return dto;
+				})
+				.collect(Collectors.toList());
+	}
 
 }
