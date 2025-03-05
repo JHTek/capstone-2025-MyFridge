@@ -1,4 +1,4 @@
-package com.example.myfridge
+package com.example.refrigeratormanager
 
 import android.app.AlertDialog
 import android.app.DatePickerDialog
