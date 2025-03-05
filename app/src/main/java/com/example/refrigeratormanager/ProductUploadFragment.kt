@@ -137,19 +137,26 @@ class ProductUploadFragment : DialogFragment() {
     }
 
     // 유통기한 선택 다이얼로그 표시
-    private fun showDatePickerDialog(editText: EditText) {
+    // 날짜 선택 다이얼로그
+    private fun showDatePickerDialog(expirationDateInput: EditText) {
         val calendar = Calendar.getInstance()
         val year = calendar.get(Calendar.YEAR)
         val month = calendar.get(Calendar.MONTH)
         val day = calendar.get(Calendar.DAY_OF_MONTH)
 
-        val datePickerDialog =
-            DatePickerDialog(requireContext(), { _, selectedYear, selectedMonth, selectedDay ->
-                val selectedDate = "$selectedYear-${selectedMonth + 1}-$selectedDay"
-                editText.setText(selectedDate)
-            }, year, month, day)
-
-        datePickerDialog.show()
+        val datePicker = DatePickerDialog(
+            requireContext(),
+            { _, selectedYear, selectedMonth, selectedDay ->
+                val formattedDate = String.format("%04d-%02d-%02d", selectedYear, selectedMonth + 1, selectedDay)
+                expirationDateInput.setText(formattedDate)
+            },
+            year,
+            month,
+            day
+        )
+        // 현재 날짜 이전 선택 불가능하게 설정
+        datePicker.datePicker.minDate = System.currentTimeMillis()
+        datePicker.show()
     }
     //리뷰
     private var selectedRefrigeratorId: Int? = null
@@ -158,11 +165,8 @@ class ProductUploadFragment : DialogFragment() {
         binding.refrigeratorSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                 val selectedRefrigeratorName = parent?.getItemAtPosition(position).toString()
-                // userRefrigerators에서 선택된 냉장고 이름을 찾아 ID를 설정
                 val selectedRefrigerator = userRefrigerators.getOrNull(position)
                 selectedRefrigeratorId = selectedRefrigerator?.let { name ->
-                    // 냉장고 이름을 기반으로 ID를 찾는 로직 (예: 서버에서 반환된 데이터 구조에 따라 다름)
-                    // 여기서는 임시로 position을 ID로 사용
                     position
                 }
             }
@@ -180,7 +184,8 @@ class ProductUploadFragment : DialogFragment() {
 
         binding.btnCancel.setOnClickListener { dismiss() } // 취소 버튼 누르면 팝업 닫기
 
-        binding.addProductButton.setOnClickListener { addProductField(true) } // 추가 버튼 클릭 시 새로운 상품 등록 필드 추가
+        binding.addProductButton.setOnClickListener {
+            addProductField(true) } // 추가 버튼 클릭 시 새로운 상품 등록 필드 추가
     }
 
     private fun addProductField(isVisible: Boolean, productName: String = "", quantity: Int = 1) {
@@ -221,8 +226,9 @@ class ProductUploadFragment : DialogFragment() {
         // ✅ 필드가 표시되어야 할 경우에만 추가
         if (isVisible) {
             binding.productFieldsContainer.addView(newProductField)
-            productFields.add(newProductField as LinearLayout) // 동적 필드 리스트에 추가
+
         }
+        productFields.add(newProductField as LinearLayout) // 동적 필드 리스트에 추가
     }
     // 제품 업로드 처리
     private fun uploadProduct() {
@@ -232,8 +238,10 @@ class ProductUploadFragment : DialogFragment() {
             return
         }
 
+
         // 각 추가된 상품 필드에 대해 정보를 가져옴
         for (productField in productFields) {
+
             val productNameInput = productField.findViewById<EditText>(R.id.productNameEditText)
             val quantityInput = productField.findViewById<EditText>(R.id.quantityEditText)
             val expirationDateInput = productField.findViewById<EditText>(R.id.expirationDateEditText)
@@ -244,6 +252,12 @@ class ProductUploadFragment : DialogFragment() {
             val expirationDate = expirationDateInput.text.toString().trim()
             val storageLocation = storageLocationSpinner.selectedItemPosition // 저장 위치 (0: 냉장, 1: 냉동, 2: 실온)
 
+            Log.d("ProductUploadFragment", "Processing productField: $productField")
+            Log.d("ProductUploadFragment", "ingredientsName: $ingredientsName")
+            Log.d("ProductUploadFragment", "quantity: $quantity")
+            Log.d("ProductUploadFragment", "expirationDate: $expirationDate")
+            Log.d("ProductUploadFragment", "storageLocation: $storageLocation")
+
             if (ingredientsName.isEmpty() || quantity == null || expirationDate.isEmpty()) {
                 Toast.makeText(requireContext(), "모든 정보를 입력하세요.", Toast.LENGTH_SHORT).show()
                 return
@@ -253,7 +267,7 @@ class ProductUploadFragment : DialogFragment() {
             val localDate = LocalDate.parse(expirationDate) // "yyyy-MM-dd" 형식이어야 함
 
             // IngredientRequestDTO 객체 생성
-            val ingredientRequest = IngredientRequestDTO(
+            val ingredientRequestDTO = IngredientRequestDTO(
                 refrigeratorId = selectedRefrigeratorId,
                 ingredientsName = ingredientsName,
                 quantity = quantity,
@@ -261,8 +275,9 @@ class ProductUploadFragment : DialogFragment() {
                 storageLocation = storageLocation
             )
 
+
             // 서버로 전송
-            sendIngredientToServer(ingredientRequest)
+            sendIngredientToServer(ingredientRequestDTO)
         }
 
         Toast.makeText(requireContext(), "상품이 업로드되었습니다!", Toast.LENGTH_SHORT).show()
