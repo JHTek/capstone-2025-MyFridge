@@ -19,7 +19,7 @@ class RefrigeratorDetailActivity : AppCompatActivity() {
         binding.tvRefrigeratorName.text = refrigeratorName
 
         // 뷰페이저 어댑터 설정
-        val adapter = RefrigeratorPagerAdapter(this)
+        val adapter = RefrigeratorPagerAdapter(this, refrigeratorName)
         binding.viewPager.adapter = adapter
 
         // 탭 레이아웃과 뷰페이저 연결
@@ -50,4 +50,3 @@ class RefrigeratorDetailActivity : AppCompatActivity() {
         }
     }
 }
-

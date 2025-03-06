@@ -4,6 +4,7 @@ import android.app.AlertDialog
 import android.app.DatePickerDialog
 import android.app.Dialog
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -217,6 +218,8 @@ class ProductUploadFragment : DialogFragment() {
             val storageLocationSpinner = productField.findViewById<Spinner>(R.id.storageTypeSpinner)
 
 
+
+
             val ingredientsName = productNameInput.text.toString().trim()
             val quantity = quantityInput.text.toString().trim().toIntOrNull()
             val expirationDate = expirationDateInput.text.toString().trim()
@@ -313,18 +316,35 @@ class ProductUploadFragment : DialogFragment() {
             return
         }
 
-        val call = ApiClient.getIngredientApi().uploadIngredients("Bearer $token", ingredientRequests)
+        val call =
+            ApiClient.getIngredientApi().uploadIngredients("Bearer $token", ingredientRequests)
         call.enqueue(object : Callback<ApiResponse> {
             override fun onResponse(call: Call<ApiResponse>, response: Response<ApiResponse>) {
                 if (response.isSuccessful) {
                     Toast.makeText(requireContext(), "재료가 업로드되었습니다!", Toast.LENGTH_SHORT).show()
+                    dismiss() // 현재 DialogFragment 종료
+
+                    // HomeActivity로 이동
+                    val intent = Intent(requireContext(), HomeActivity::class.java)
+                    intent.flags =
+                        Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK // 기존 액티비티 종료 및 새로 시작
+                    startActivity(intent)
+                    requireActivity().finish() // 현재 액티비티 종료 (필요 시)
                 } else {
-                    Toast.makeText(requireContext(), "재료 업로드 실패: ${response.message()}", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(
+                        requireContext(),
+                        "재료 업로드 실패: ${response.message()}",
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
             }
 
             override fun onFailure(call: Call<ApiResponse>, t: Throwable) {
-                Toast.makeText(requireContext(), "네트워크 오류: ${t.message}", Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                    requireContext(),
+                    "네트워크 오류: ${t.localizedMessage}",
+                    Toast.LENGTH_SHORT
+                ).show()
             }
         })
     }

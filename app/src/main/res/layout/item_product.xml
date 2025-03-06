@@ -1,0 +1,45 @@
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="16dp"
+    android:gravity="center_vertical">
+
+    <!-- 상품명 -->
+    <TextView
+        android:id="@+id/productNameTextView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="상품명"
+        android:textSize="16sp"
+        android:layout_weight="1" />
+
+    <!-- 수량 -->
+    <TextView
+        android:id="@+id/quantityTextView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="수량"
+        android:textSize="14sp"
+        android:layout_weight="1" />
+
+    <!-- 유통기한 -->
+    <TextView
+        android:id="@+id/expirationDateTextView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="유통기한"
+        android:textSize="14sp"
+        android:layout_weight="1" />
+
+    <!-- 삭제 버튼 -->
+    <Button
+        android:id="@+id/deleteButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:backgroundTint="@color/black"
+        android:text="삭제" />
+
+</LinearLayout>
