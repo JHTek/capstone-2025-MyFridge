@@ -51,12 +51,29 @@ class ProductUploadFragment : DialogFragment() {
     }
 
     private fun setupUI() {
+        val productMap = arguments?.getSerializable("productData") as? Map<String, Int> ?: emptyMap()
         val productName = arguments?.getString("productName") ?: "" //상품명 받아오기
-        binding.productNameEditText.setText(productName)
-        binding.quantityEditText.setText("1") // 기본 수량 설정
 
         binding.expirationDateEditText.setText("") // 유통기한 비워둠
         binding.storageTypeSpinner.setSelection(0) // 기본값으로 "냉장" 설정
+
+        val productList = productMap.entries.toList()
+
+        if (productList.isNotEmpty()) {
+            // ✅ 첫 번째 상품은 기존 필드를 사용
+            val firstEntry = productList.first()
+            binding.productNameEditText.setText(firstEntry.key)
+            binding.quantityEditText.setText(firstEntry.value.toString())
+
+            // ✅ 두 번째 상품부터 동적으로 추가
+            productList.drop(1).forEach { (name, quantity) ->
+                addProductField(true, name, quantity)
+            }
+        } else {
+            // ✅ 데이터가 없을 경우 기본 필드 추가
+            binding.productNameEditText.setText(productName)
+            binding.quantityEditText.setText("1") // 기본 수량 설정
+        }
 
         loadUserRefrigerators()
         setupStorageTypeSpinner()
@@ -249,7 +266,7 @@ class ProductUploadFragment : DialogFragment() {
     }
 
     // 동적으로 추가된 상품 필드 값 가져오기
-    private fun addProductField(isVisible: Boolean) {
+    private fun addProductField(isVisible: Boolean, productName: String = "", quantity: Int = 1) {
         val inflater = LayoutInflater.from(requireContext())
         val newProductField = inflater.inflate(R.layout.layout_product_input, binding.productFieldsContainer, false)
 
