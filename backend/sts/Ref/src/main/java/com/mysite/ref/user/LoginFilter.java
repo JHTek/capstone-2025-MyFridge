@@ -43,19 +43,30 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
 	protected void successfulAuthentication(HttpServletRequest request,HttpServletResponse response, FilterChain chain, Authentication authentication) throws IOException {
 		System.out.println("Success");
 		CustomUserDetails customUserDetails = (CustomUserDetails)authentication.getPrincipal();
-		
 		String userid = customUserDetails.getUserid();
+		String username = customUserDetails.getUsername();
         Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
         Iterator<? extends GrantedAuthority> iterator = authorities.iterator();
         GrantedAuthority auth = iterator.next();
         String role = auth.getAuthority();
+<<<<<<< HEAD
 
+=======
+>>>>>>> branch 'main' of https://github.com/JHTek/capstone-2025-MyFridge.git
         String token = jwtUtil.createJwt(userid, role, 1000L * 60 * 60 * 24);
         response.addHeader("Authorization", "Bearer " + token);
+        response.setCharacterEncoding("UTF-8");
         
         response.setContentType("application/json");
-        response.getWriter().write("{\"status\": \"success\", \"message\": \"로그인 성공\", \"user\": {\"userid\": \"" + userid + "\", \"role\": \"" + role + "\"}}");
-		
+        response.getWriter().write(
+        	    "{"
+        	    + "\"status\": \"success\","
+        	    + "\"message\": \"로그인 성공\","
+        	    + "\"userid\": \"" + userid + "\","
+        	    + "\"username\": \"" + username + "\","
+        	    + "\"role\": \"" + role + "\""
+        	    + "}"
+        	);
 	}
 	
 	@Override
