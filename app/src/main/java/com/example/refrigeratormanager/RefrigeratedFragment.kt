@@ -17,9 +17,11 @@ import com.example.refrigeratormanager.databinding.FragmentRefrigeratedBinding
 class RefrigeratedFragment : Fragment() {
     private lateinit var binding: FragmentRefrigeratedBinding
     private var refrigeratorName: String? = null
+    // 냉장고 고유 ID와 이름을 저장하는 변수
     private var refrigeratorId: Int = -1 // 전달받는 냉장고 ID
 
     companion object {
+        // Fragment를 생성할 때 냉장고 ID와 이름을 넘길 수 있도록 팩토리 메서드 제공
         fun newInstance(refrigeratorId: Int, refrigeratorName: String): RefrigeratedFragment {
             val fragment = RefrigeratedFragment()
             val args = Bundle()
@@ -30,6 +32,7 @@ class RefrigeratedFragment : Fragment() {
         }
     }
 
+    // JWT 토큰을 SharedPreferences에서 가져오기
     private fun getToken(): String? {
         val sharedPreferences = requireContext().getSharedPreferences("app_preferences", Context.MODE_PRIVATE)
         return sharedPreferences.getString("JWT_TOKEN", null)
@@ -41,9 +44,11 @@ class RefrigeratedFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentRefrigeratedBinding.inflate(inflater, container, false)
+        // 인자로 전달받은 냉장고 ID 및 이름을 가져옴
         refrigeratorName = arguments?.getString("refrigerator_name") ?: ""
         refrigeratorId = arguments?.getInt("refrigerator_id") ?: -1
 
+        // 서버에서 데이터를 가져와서 UI에 표시
         if (refrigeratorId != -1) {
             loadAndDisplayProducts() // 서버에서 로드 후 displayProducts 호출
         }
@@ -51,16 +56,8 @@ class RefrigeratedFragment : Fragment() {
         Log.d("FragmentCheck", "냉장고 ID: $refrigeratorId") // 꼭 찍어보자!
         return binding.root
     }
-//    override fun onCreateView(
-//        inflater: LayoutInflater, container: ViewGroup?,
-//        savedInstanceState: Bundle?
-//    ): View {
-//        binding = FragmentRefrigeratedBinding.inflate(inflater, container, false)
-//        refrigeratorName = arguments?.getString("refrigerator_name")
-//        displayProducts()
-//        return binding.root
-//    }
 
+    // 서버에서 식재료 데이터를 가져와 ProductManager에 저장하고 화면에 표시
     private fun loadAndDisplayProducts() {
         val token = getToken() ?: return
 
@@ -108,6 +105,7 @@ class RefrigeratedFragment : Fragment() {
                 productExpiration.text = "유통기한: ${product.expirationDate}"
 
                 deleteButton.setOnClickListener {
+                    // 삭제 버튼 클릭 시 로컬 목록에서 삭제 후 화면 갱신
                     ProductManager.removeProduct(refrigeratorId, product)
                     displayProducts()
                 }
@@ -123,38 +121,4 @@ class RefrigeratedFragment : Fragment() {
             binding.productContainer.addView(noProductsText)
         }
     }
-
-//    private fun displayProducts() {
-//        binding.productContainer.removeAllViews()
-//
-//        val products = ProductManager.getSortedProductsByExpiration(refrigeratorName)?.get(0) // 냉장(0)
-//        if (products != null && products.isNotEmpty()) {
-//            products.forEach { product ->
-//                val view =
-//                    layoutInflater.inflate(R.layout.item_product, binding.productContainer, false)
-//                val productName = view.findViewById<TextView>(R.id.productNameTextView)
-//                val productQuantity = view.findViewById<TextView>(R.id.quantityTextView)
-//                val productExpiration = view.findViewById<TextView>(R.id.expirationDateTextView)
-//                val deleteButton = view.findViewById<Button>(R.id.deleteButton)
-//
-//                productName.text = product.ingredientsName
-//                productQuantity.text = "수량: ${product.quantity}"
-//                productExpiration.text = "유통기한: ${product.expirationDate}"
-//
-//                deleteButton.setOnClickListener {
-//                    ProductManager.removeProduct(refrigeratorName!!, product)
-//                    displayProducts()  // 삭제 후 새로 고침
-//                }
-//
-//                binding.productContainer.addView(view)
-//            }
-//        } else {
-//            val noProductsText = TextView(requireContext()).apply {
-//                text = "제품이 없습니다."
-//                gravity = Gravity.CENTER
-//                textSize = 16f
-//            }
-//            binding.productContainer.addView(noProductsText)
-//        }
-//    }
 }
