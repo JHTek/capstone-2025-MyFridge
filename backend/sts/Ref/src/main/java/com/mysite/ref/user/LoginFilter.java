@@ -49,10 +49,6 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
         Iterator<? extends GrantedAuthority> iterator = authorities.iterator();
         GrantedAuthority auth = iterator.next();
         String role = auth.getAuthority();
-<<<<<<< HEAD
-
-=======
->>>>>>> branch 'main' of https://github.com/JHTek/capstone-2025-MyFridge.git
         String token = jwtUtil.createJwt(userid, role, 1000L * 60 * 60 * 24);
         response.addHeader("Authorization", "Bearer " + token);
         response.setCharacterEncoding("UTF-8");
