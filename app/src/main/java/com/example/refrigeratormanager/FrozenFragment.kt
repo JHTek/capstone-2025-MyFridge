@@ -1,5 +1,6 @@
 package com.example.refrigeratormanager
 
+import android.content.Context
 import android.os.Bundle
 import android.view.Gravity
 import android.view.LayoutInflater
@@ -7,21 +8,28 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.example.refrigeratormanager.databinding.FragmentFrozenBinding
 
 class FrozenFragment : Fragment() {
     private lateinit var binding: FragmentFrozenBinding
     private var refrigeratorName: String? = null
+    private var refrigeratorId: Int = -1 // 전달받는 냉장고 ID
 
     companion object {
-        fun newInstance(refrigeratorName: String): FrozenFragment {
+        fun newInstance(refrigeratorId: Int, refrigeratorName: String): FrozenFragment {
             val fragment = FrozenFragment()
             val args = Bundle()
+            args.putInt("refrigerator_id", refrigeratorId)
             args.putString("refrigerator_name", refrigeratorName)
             fragment.arguments = args
             return fragment
         }
+    }
+    private fun getToken(): String? {
+        val sharedPreferences = requireContext().getSharedPreferences("app_preferences", Context.MODE_PRIVATE)
+        return sharedPreferences.getString("JWT_TOKEN", null)
     }
 
     override fun onCreateView(
@@ -29,19 +37,53 @@ class FrozenFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentFrozenBinding.inflate(inflater, container, false)
-        refrigeratorName = arguments?.getString("refrigerator_name")
-        displayProducts()
+        refrigeratorName = arguments?.getString("refrigerator_name") ?: ""
+        refrigeratorId = arguments?.getInt("refrigerator_id") ?: -1
+
+        if (refrigeratorId != -1) {
+            loadAndDisplayProducts() // 서버에서 로드 후 displayProducts 호출
+        }
+
         return binding.root
+    }
+
+    private fun loadAndDisplayProducts() {
+        val token = getToken() ?: return
+
+        ProductRepository.fetchProducts(
+            token = token,
+            refrigeratorId = refrigeratorId,
+            onSuccess = { ingredients ->
+                // 서버 응답 DTO를 로컬 Product 모델로 변환
+                val products = ingredients.map {
+                    Product(
+                        ingredientsName = it.ingredientsName,
+                        quantity = it.quantity,
+                        expirationDate = it.expirationDate,
+                        storageLocation = it.storageLocation,
+                        refrigeratorId = refrigeratorId
+                    )
+                }
+
+                // 저장
+                ProductManager.updateProducts(refrigeratorId, products)
+
+                // 화면 표시
+                displayProducts()
+            },
+            onFailure = {
+                Toast.makeText(requireContext(), "식재료 불러오기 실패", Toast.LENGTH_SHORT).show()
+            }
+        )
     }
 
     private fun displayProducts() {
         binding.productContainer.removeAllViews()
 
-        val products = ProductManager.getSortedProductsByExpiration(refrigeratorName)?.get(1) // 냉동(1)
-        if (products != null && products.isNotEmpty()) {
+        val products = ProductManager.getSortedProductsByExpiration(refrigeratorId).getOrNull(1) //냉장(0), 냉동(1), 실온(2)
+        if (!products.isNullOrEmpty()) {
             products.forEach { product ->
-                val view =
-                    layoutInflater.inflate(R.layout.item_product, binding.productContainer, false)
+                val view = layoutInflater.inflate(R.layout.item_product, binding.productContainer, false)
                 val productName = view.findViewById<TextView>(R.id.productNameTextView)
                 val productQuantity = view.findViewById<TextView>(R.id.quantityTextView)
                 val productExpiration = view.findViewById<TextView>(R.id.expirationDateTextView)
@@ -52,8 +94,8 @@ class FrozenFragment : Fragment() {
                 productExpiration.text = "유통기한: ${product.expirationDate}"
 
                 deleteButton.setOnClickListener {
-                    ProductManager.removeProduct(refrigeratorName!!, product)
-                    displayProducts()  // 삭제 후 새로 고침
+                    ProductManager.removeProduct(refrigeratorId, product)
+                    displayProducts()
                 }
 
                 binding.productContainer.addView(view)
