@@ -54,7 +54,7 @@ class ProductUploadFragment : DialogFragment() {
         val productMap = arguments?.getSerializable("productData") as? Map<String, Int> ?: emptyMap()
         val productName = arguments?.getString("productName") ?: "" //상품명 받아오기
         val quantity = arguments?.getString("quantity") ?: "1" // 기본 수량 설정
-        Log.d("ProductUploadFragment", "받은 이름: $productName, 수량: $quantity") // 👈 요거 추가해봐!
+        Log.d("ProductUploadFragment", "받은 이름: $productName, 수량: $quantity")
 
 
 
