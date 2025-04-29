@@ -14,12 +14,13 @@ class RefrigeratorDetailActivity : AppCompatActivity() {
         binding = ActivityRefrigeratorDetailBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        // 인텐트에서 냉장고 이름 가져오기 (기본값: "냉장고")
+        // 인텐트에서 냉장고 이름, 아이디 가져오기 (기본값: "냉장고", -1)
+        val refrigeratorId = intent.getIntExtra("refrigerator_id", -1)
         val refrigeratorName = intent.getStringExtra("refrigerator_name") ?: "냉장고"
         binding.tvRefrigeratorName.text = refrigeratorName
 
         // 뷰페이저 어댑터 설정
-        val adapter = RefrigeratorPagerAdapter(this, refrigeratorName)
+        val adapter = RefrigeratorPagerAdapter(this, refrigeratorId, refrigeratorName)
         binding.viewPager.adapter = adapter
 
         // 탭 레이아웃과 뷰페이저 연결

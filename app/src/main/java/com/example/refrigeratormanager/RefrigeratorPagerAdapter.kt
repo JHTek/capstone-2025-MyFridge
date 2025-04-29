@@ -6,6 +6,7 @@ import androidx.viewpager2.adapter.FragmentStateAdapter
 
 class RefrigeratorPagerAdapter(
     activity: AppCompatActivity,
+    private val refrigeratorId: Int,
     private val refrigeratorName: String
 ) : FragmentStateAdapter(activity) {
 
@@ -13,9 +14,9 @@ class RefrigeratorPagerAdapter(
 
     override fun createFragment(position: Int): Fragment {
         return when (position) {
-            0 -> RefrigeratedFragment.newInstance(refrigeratorName) // 냉장
-            1 -> FrozenFragment.newInstance(refrigeratorName)       // 냉동
-            2 -> RoomTempFragment.newInstance(refrigeratorName) // 실온
+            0 -> RefrigeratedFragment.newInstance(refrigeratorId, refrigeratorName) // 냉장
+            1 -> FrozenFragment.newInstance(refrigeratorId, refrigeratorName)       // 냉동
+            2 -> RoomTempFragment.newInstance(refrigeratorId, refrigeratorName) // 실온
             else -> Fragment()
         }
     }

@@ -54,8 +54,11 @@ class MainActivity : AppCompatActivity() {
                 if (response.isSuccessful && response.body()?.status == "success") {
 
                     val loginResponse = response.body()//로그
+                    Log.d("MainActivity", "로그인리스폰스: ${loginResponse.toString()}")
                     val token = response.headers()["Authorization"]?.replace("Bearer ", "") // JWT 토큰
-                    saveToken(token)
+                    val userId = loginResponse?.userid ?: ""
+                    val nickname = loginResponse?.username ?: ""
+                    saveLoginData(token,userId,nickname)
 
                     Log.d("MainActivity", "헤더에서 받은 토큰: $token")//로그
 
@@ -71,12 +74,16 @@ class MainActivity : AppCompatActivity() {
             }
         })
     }
-    private fun saveToken(token: String?) {
+
+    private fun saveLoginData(token: String?, userId: String, nickname: String) {
         val sharedPreferences = getSharedPreferences("app_preferences", MODE_PRIVATE)
         val editor = sharedPreferences.edit()
         editor.putString("JWT_TOKEN", token)
+        editor.putString("USER_ID", userId)
+        editor.putString("NICKNAME", nickname)
         editor.apply()
 
-        Log.d("MainActivity", "Token saved: $token")
+        Log.d("MainActivity", "Login data saved: token=$token, id=$userId, nickname=$nickname")
     }
+
 }

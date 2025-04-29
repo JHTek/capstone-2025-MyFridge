@@ -36,6 +36,8 @@ class HomeFragment : Fragment() {
         // RecyclerView 설정
         refrigeratorAdapter = RefrigeratorAdapter { refrigerator ->
             val intent = Intent(requireContext(), RefrigeratorDetailActivity::class.java)
+            // 냉장고 고유 ID를 전달 (서버에서 식재료 요청 시 필요)
+            intent.putExtra("refrigerator_id", refrigerator.id)     // ✅ 이거 추가!
             intent.putExtra("refrigerator_name", refrigerator.name)
             startActivity(intent)
         }
