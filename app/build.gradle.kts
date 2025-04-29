@@ -65,6 +65,14 @@ dependencies {
     implementation ("androidx.camera:camera-lifecycle:1.3.0")
     implementation ("androidx.camera:camera-view:1.3.0")
 
+    // mlkit API 모델을 앱과 번들로 묶음
+    implementation ("com.google.mlkit:barcode-scanning:17.3.0")
+
+    //glide 이미지 라이브러리
+    implementation ("com.github.bumptech.glide:glide:4.13.2")
+    annotationProcessor ("com.github.bumptech.glide:compiler:4.13.2")
+
+
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)

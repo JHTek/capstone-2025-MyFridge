@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <!-- 서버 응답을 표시할 TextView 추가 -->
+    <TextView
+        android:id="@+id/responseText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="응답이 여기에 표시됩니다."
+        android:textSize="16sp"
+        android:padding="8dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:background="@android:color/darker_gray"
+        android:textColor="@android:color/white"
+        android:paddingHorizontal="16dp"
+        android:paddingVertical="8dp"
+        android:visibility="gone"/>
+
+    <!-- 채팅 목록을 표시할 RecyclerView -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/responseText"
+        android:layout_above="@id/messageLayout"
+        android:padding="8dp"
+        android:clipToPadding="false"
+        android:scrollbars="vertical"/>
+
+
+    <!-- 메시지 입력창 -->
+    <LinearLayout
+        android:id="@+id/messageLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:orientation="horizontal"
+        android:padding="8dp"
+        android:background="#F5F5F5">
+
+        <EditText
+            android:id="@+id/messageInput"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:hint="메시지를 입력하세요"
+            android:background="@android:color/white"
+            android:padding="8dp"
+            android:textSize="16sp"/>
+
+        <Button
+            android:id="@+id/sendButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="전송"/>
+    </LinearLayout>
+
+</RelativeLayout>

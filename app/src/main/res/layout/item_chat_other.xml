@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:gravity="start"
+    android:padding="8dp">
+
+    <TextView
+        android:id="@+id/messageText"
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_chat_other"
+        android:padding="10dp"
+        android:textSize="16sp"
+        android:textColor="#000000"
+        android:maxWidth="240dp"
+        android:layout_marginStart="8dp"/>
+    <!-- 왼쪽 여백 추가 -->
+</LinearLayout>

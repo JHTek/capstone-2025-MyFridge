@@ -25,6 +25,9 @@
             android:name=".MyInfoActivity"
             android:exported="false" />
         <activity
+            android:name=".ChatActivity"
+            android:exported="false" />
+        <activity
             android:name=".SearchActivity"
             android:exported="false" />
         <activity

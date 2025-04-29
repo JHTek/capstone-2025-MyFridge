@@ -4,11 +4,11 @@
     android:layout_height="match_parent"
     android:background="@android:color/black">
 
-    <!-- 카메라 프리뷰 -->
-    <SurfaceView
+    <!-- CameraX 프리뷰용 PreviewView로 변경 -->
+    <androidx.camera.view.PreviewView
         android:id="@+id/cameraPreview"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent" />
 
     <!-- 바코드 인식 결과 -->
     <TextView
@@ -19,5 +19,5 @@
         android:text="바코드를 스캔하세요"
         android:textColor="@android:color/white"
         android:textSize="18sp"
-        android:padding="16dp"/>
+        android:padding="16dp" />
 </FrameLayout>

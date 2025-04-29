@@ -53,6 +53,11 @@ class ProductUploadFragment : DialogFragment() {
     private fun setupUI() {
         val productMap = arguments?.getSerializable("productData") as? Map<String, Int> ?: emptyMap()
         val productName = arguments?.getString("productName") ?: "" //상품명 받아오기
+        val quantity = arguments?.getString("quantity") ?: "1" // 기본 수량 설정
+        Log.d("ProductUploadFragment", "받은 이름: $productName, 수량: $quantity") // 👈 요거 추가해봐!
+
+
+
 
         binding.expirationDateEditText.setText("") // 유통기한 비워둠
         binding.storageTypeSpinner.setSelection(0) // 기본값으로 "냉장" 설정
@@ -72,7 +77,7 @@ class ProductUploadFragment : DialogFragment() {
         } else {
             // ✅ 데이터가 없을 경우 기본 필드 추가
             binding.productNameEditText.setText(productName)
-            binding.quantityEditText.setText("1") // 기본 수량 설정
+            binding.quantityEditText.setText(quantity)
         }
 
         loadUserRefrigerators()

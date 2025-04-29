@@ -11,7 +11,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.DialogFragment
 import com.example.refrigeratormanager.databinding.FragmentManualInputBinding
-
+// 상품명을 입력하시오 화면
 class ManualInputFragment : DialogFragment() {
 
     private var _binding: FragmentManualInputBinding? = null

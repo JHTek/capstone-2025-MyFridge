@@ -8,9 +8,6 @@ import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import java.util.regex.Pattern
-import com.example.refrigeratormanager.ApiClient;
-import com.example.refrigeratormanager.Users;
-import com.example.refrigeratormanager.UsersApi;
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response

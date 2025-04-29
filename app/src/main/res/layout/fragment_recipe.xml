@@ -1,14 +1,203 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".RecipeFragment">
+    >
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <LinearLayout
+        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:layout_height="wrap_content"
+        android:padding="16dp"
+        android:background="#FFFFFF">
 
-</FrameLayout>
+        <!-- 🔍 검색창 -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:background="#F5F5F5"
+            android:paddingHorizontal="12dp"
+            android:gravity="center_vertical"
+            android:layout_marginBottom="16dp">
+
+            <EditText
+                android:id="@+id/editTextSearch"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@android:color/transparent"
+                android:hint="찾고싶은 요리이름 검색"
+                android:textSize="14sp" />
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_search"
+                android:contentDescription="검색 아이콘" />
+        </LinearLayout>
+
+        <!-- 🧅 양파 섹션 -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginBottom="8dp">
+
+            <TextView
+                android:id="@+id/textOnionTitle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="양파를 사용하는 추천 요리"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:textColor="@android:color/black" />
+
+            <TextView
+                android:id="@+id/textOnionMore"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="더보기"
+                android:textSize="14sp"
+                android:textColor="@android:color/black" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="24dp">
+
+            <!-- 요리 1 -->
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:padding="4dp">
+
+                <ImageView
+                    android:id="@+id/imageOnionRecipe1"
+                    android:layout_width="match_parent"
+                    android:layout_height="100dp"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/character" />
+
+                <TextView
+                    android:id="@+id/textOnionRecipe1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="요리이름1"
+                    android:gravity="center"
+                    android:textSize="14sp" />
+            </LinearLayout>
+
+            <!-- 요리 2 -->
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:padding="4dp">
+
+                <ImageView
+                    android:id="@+id/imageOnionRecipe2"
+                    android:layout_width="match_parent"
+                    android:layout_height="100dp"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/character" />
+
+                <TextView
+                    android:id="@+id/textOnionRecipe2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="요리이름2"
+                    android:gravity="center"
+                    android:textSize="14sp" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <!-- 🥬 시금치 섹션 -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginBottom="8dp">
+
+            <TextView
+                android:id="@+id/textSpinachTitle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="시금치를 사용하는 추천 요리"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:textColor="@android:color/black" />
+
+            <TextView
+                android:id="@+id/textSpinachMore"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="더보기"
+                android:textSize="14sp"
+                android:textColor="@android:color/black" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="24dp">
+
+            <!-- 요리 1 -->
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:padding="4dp">
+
+                <ImageView
+                    android:id="@+id/imageSpinachRecipe1"
+                    android:layout_width="match_parent"
+                    android:layout_height="100dp"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/character" />
+
+                <TextView
+                    android:id="@+id/textSpinachRecipe1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="요리이름3"
+                    android:gravity="center"
+                    android:textSize="14sp" />
+            </LinearLayout>
+
+            <!-- 요리 2 -->
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:padding="4dp">
+
+                <ImageView
+                    android:id="@+id/imageSpinachRecipe2"
+                    android:layout_width="match_parent"
+                    android:layout_height="100dp"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/character" />
+
+                <TextView
+                    android:id="@+id/textSpinachRecipe2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="요리이름4"
+                    android:gravity="center"
+                    android:textSize="14sp" />
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+</ScrollView>

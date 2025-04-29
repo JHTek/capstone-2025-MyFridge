@@ -2,6 +2,7 @@ package com.example.refrigeratormanager
 
 import android.graphics.Color
 import android.os.Bundle
+import android.util.Log
 import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -64,8 +65,31 @@ class CameraActivity : AppCompatActivity(), ManualInputFragment.ManualInputListe
 
     // ManualInputFragment에서 상품명을 입력받으면 ProductUploadFragment 실행
     override fun onProductNameEntered(productName: String) {
-        showProductUploadDialog(productName)
+        val tokens = productName.trim().split("\\s+".toRegex()) // 공백 기준 split
+        val name: String
+        val quantity: String
+
+        if (tokens.size >= 2) {
+            quantity = tokens.last()
+            name = tokens.dropLast(1).joinToString(" ") // 마지막 제외 나머지를 이름으로
+        } else {
+            name = tokens.firstOrNull() ?: "알 수 없음"
+            quantity = "1" // 기본값
+        }
+
+        Log.d("CameraActivity", "파싱된 이름: $name, 수량: $quantity")
+
+        val dialog = ProductUploadFragment()
+        val args = Bundle().apply {
+            putString("productName", name)
+            putString("quantity", quantity)
+        }
+        dialog.arguments = args
+        dialog.show(supportFragmentManager, "ProductUploadFragment")
     }
+
+
+
 
     private fun showProductUploadDialog(productName: String) {
         val dialog = ProductUploadFragment()

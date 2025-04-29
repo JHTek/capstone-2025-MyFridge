@@ -19,4 +19,6 @@ public interface UsersApi {
     @POST("/login")
     Call<LoginResponse> login(@Field("userid") String userid, @Field("password") String password);
 
+    @POST("/chat/sendMessage") // 실제 엔드포인트 확인 필요
+    Call<ChatResponse> sendMessage(@Body ChatRequest request);
 }
