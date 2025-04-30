@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/rootLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="24dp"
+    android:background="#FFFFFF">
+
+    <!-- 타이틀 -->
+    <TextView
+        android:id="@+id/titleChecklist"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Checklist"
+        android:textSize="28sp"
+        android:textColor="#000000"
+        android:textStyle="bold"
+        android:layout_gravity="center_horizontal"
+        android:fontFamily="sans-serif-medium" />
+
+    <TextView
+        android:id="@+id/subTitleChecklist"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="오늘의 체크리스트"
+        android:textSize="16sp"
+        android:textColor="#000000"
+        android:layout_marginTop="4dp"
+        android:layout_gravity="center_horizontal" />
+
+    <!-- 옵션 버튼 -->
+    <ImageButton
+        android:id="@+id/btnOption"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:src="@android:drawable/ic_menu_more"
+        android:contentDescription="옵션"
+        android:tint="#000000"
+        android:layout_marginTop="8dp"/>
+
+    <!-- 체크리스트 항목들 -->
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:layout_marginTop="16dp">
+
+        <LinearLayout
+            android:id="@+id/checklistContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" />
+    </ScrollView>
+
+    <!-- 항목 추가 버튼 -->
+    <EditText
+        android:id="@+id/editChecklist"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="항목을 입력하세요"
+        android:textSize="16sp"
+        android:padding="8dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="8dp"
+        android:background="@android:drawable/edit_text" />
+
+    <!-- 항목 추가하기 버튼 -->
+    <Button
+        android:id="@+id/btnAddItem"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="항목 추가하기"
+        android:textAllCaps="false"
+        android:textColor="#FFFFFF"
+        android:backgroundTint="#000000"
+        android:layout_marginTop="8dp" />
+
+
+</LinearLayout>

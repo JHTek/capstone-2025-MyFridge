@@ -1,7 +1,6 @@
 package com.example.refrigeratormanager
 
 import android.os.Bundle
-import android.util.Log
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -20,7 +19,7 @@ class HomeActivity : AppCompatActivity() {
         // 기본 Fragment 설정
         if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction()
-                .replace(R.id.fragmentContainer, HomeFragment())
+                .replace(R.id.fragmentContainer, MainHomeFragment())
                 .commit()
         }
 
@@ -28,7 +27,7 @@ class HomeActivity : AppCompatActivity() {
         binding.bottomNavigationView.setOnItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.nav_refrigerator -> replaceFragment(HomeFragment())
-                R.id.nav_category -> replaceFragment(CategoryFragment())
+                R.id.nav_mainhome -> replaceFragment(MainHomeFragment())
                 R.id.nav_recipe -> replaceFragment(RecipeFragment())
                 R.id.nav_mypage -> replaceFragment(MyPageFragment())
             }

@@ -1,0 +1,11 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/action_check_all"
+        android:title="전체 체크" />
+    <item
+        android:id="@+id/action_uncheck_all"
+        android:title="전체 해제" />
+    <item
+        android:id="@+id/action_delete_all"
+        android:title="전체 삭제" />
+</menu>
