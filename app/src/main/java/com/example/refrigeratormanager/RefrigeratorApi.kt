@@ -8,13 +8,13 @@ import retrofit2.http.Header
 import retrofit2.http.POST
 
 interface RefrigeratorApi {
-    @POST("/refrigerator/create")
+    @POST("refrigerator/create")
     fun createRefrigerator(
         @Header("Authorization") token: String,
         @Body refrigerator: RefrigeratorDTO
     ): Call<String>
 
-    @GET("/refrigerator/list")
+    @GET("refrigerator/list")
     suspend fun getRefrigerators(@Header("Authorization") token: String): Response<List<Refrigerator>>
 
 }
