@@ -12,7 +12,6 @@ import com.mysite.ref.dto.RefrigeratorResponseDTO;
 import com.mysite.ref.user.JWTUtil;
 import com.mysite.ref.user.Users;
 import com.mysite.ref.user.UsersRepository;
-
 import lombok.RequiredArgsConstructor;
 
 @Service
