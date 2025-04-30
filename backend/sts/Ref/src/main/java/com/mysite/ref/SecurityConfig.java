@@ -44,6 +44,7 @@ public class SecurityConfig {
 			.authorizeHttpRequests((authorizeHttpRequests)-> authorizeHttpRequests
 					.requestMatchers("/login","/","/user/checkUser","/jump","/user/register","/chat/sendMessage").permitAll()
 					.requestMatchers("/admin").hasRole("ADMIN")
+					.requestMatchers("/recipes/search").hasAnyRole("USER", "ADMIN") // ✅ 추가
 					.anyRequest().authenticated())
 			.addFilterAt(new LoginFilter(authenticationManager(authenticationConfiguration),jwtUtil), UsernamePasswordAuthenticationFilter.class)
 			//세션설정 STATELESS상태로
