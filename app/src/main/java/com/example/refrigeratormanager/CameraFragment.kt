@@ -147,7 +147,7 @@ class CameraFragment : Fragment() {
         val multipartBody = MultipartBody.Part.createFormData("image", photoFile.name, requestBody)
 
         val retrofit = Retrofit.Builder()
-            .baseUrl("http://10.0.2.2:5000/") // 🔹 서버 URL 설정
+            .baseUrl("https://988b-39-115-67-181.ngrok-free.app/") // 🔹 서버 URL 설정*****************************
             .addConverterFactory(GsonConverterFactory.create())
             .build()
 

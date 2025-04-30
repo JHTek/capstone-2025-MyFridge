@@ -69,11 +69,6 @@ class ProductUploadFragment : DialogFragment() {
             val firstEntry = productList.first()
             binding.productNameEditText.setText(firstEntry.key)
             binding.quantityEditText.setText(firstEntry.value.toString())
-
-            // ✅ 두 번째 상품부터 동적으로 추가
-            productList.drop(1).forEach { (name, quantity) ->
-                addProductField(true, name, quantity)
-            }
         } else {
             // ✅ 데이터가 없을 경우 기본 필드 추가
             binding.productNameEditText.setText(productName)
@@ -120,6 +115,10 @@ class ProductUploadFragment : DialogFragment() {
                                 userRefrigerators
                             )
                             binding.refrigeratorSpinner.adapter = adapter
+
+                            // ✅ [추가] 냉장고 목록이 준비된 이후에 동적 필드 추가
+                            addDynamicProductFieldsIfNeeded()
+
                             binding.uploadButton.isEnabled = true
                         } else {
                             binding.refrigeratorSpinner.adapter = ArrayAdapter(
@@ -148,6 +147,16 @@ class ProductUploadFragment : DialogFragment() {
         binding.storageTypeSpinner.adapter = adapter
     }
 
+    // ✅ [추가 함수] 냉장고 데이터가 로드된 후에만 동적 상품 필드를 추가
+    private fun addDynamicProductFieldsIfNeeded() {
+        val productMap = arguments?.getSerializable("productData") as? Map<String, Int> ?: return
+
+        // 첫 번째 항목은 이미 setupUI()에서 처리됨, 나머지만 추가
+        val productList = productMap.entries.toList().drop(1)
+        productList.forEach { (name, quantity) ->
+            addProductField(true, name, quantity)  // 이 시점엔 userRefrigerators가 채워져 있음
+        }
+    }
 
     // 날짜 선택 다이얼로그
     private fun showDatePickerDialog(expirationDateInput: EditText) {
@@ -312,8 +321,9 @@ class ProductUploadFragment : DialogFragment() {
         expirationDateEditText.setText("") // 기본 유통기한 비워둠
 
         // 상품 이름, 수량 필드 비워둠
-        productNameEditText.setText("")
-        quantityEditText.setText("1")
+        // ✅ [수정] 상품 이름, 수량 필드에 전달된 값 반영
+        productNameEditText.setText(productName)
+        quantityEditText.setText(quantity.toString())
 
         storageTypeSpinner.setSelection(0) // 기본값으로 "냉장" 설정
 

@@ -7,7 +7,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.converter.scalars.ScalarsConverterFactory;
 
 public class ApiClient {
-    private static final String BASE_URL = "http://10.0.2.2:8080";
+    private static final String BASE_URL = "http://10.0.2.2:8080"; //여기 컴 아이피로 변경 10.0.2.2:8080
     private static Retrofit retrofit = null;
 
     public static Retrofit getClient() {
@@ -27,3 +27,9 @@ public class ApiClient {
         return retrofit.create(IngredientApi.class);
     }
 }
+
+
+
+
+
+
