@@ -18,7 +18,7 @@ public class UsersService {
 		Users user = new Users();
 		user.setUserid(userid);
 		user.setUsername(username);
-		user.setRole("ROLE_ADMIN");
+		user.setRole("ROLE_USER"); // ✅ 일반 사용자 권한으로 설정 user.setRole("ROLE_ADMIN");는 관리자 권한
 		user.setPassword(passwordEncoder.encode(password));
 		this.usersRepository.save(user);
 		return user;
