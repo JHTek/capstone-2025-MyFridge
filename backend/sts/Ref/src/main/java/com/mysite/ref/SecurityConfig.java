@@ -42,7 +42,7 @@ public class SecurityConfig {
 			.formLogin((auth) -> auth.disable()) 
 			//경로별 인가
 			.authorizeHttpRequests((authorizeHttpRequests)-> authorizeHttpRequests
-					.requestMatchers("/login","/","/user/checkUser","/jump","/user/register").permitAll()
+					.requestMatchers("/login","/","/user/checkUser","/jump","/user/register","/chat/sendMessage").permitAll()
 					.requestMatchers("/admin").hasRole("ADMIN")
 					.anyRequest().authenticated())
 			.addFilterAt(new LoginFilter(authenticationManager(authenticationConfiguration),jwtUtil), UsernamePasswordAuthenticationFilter.class)
