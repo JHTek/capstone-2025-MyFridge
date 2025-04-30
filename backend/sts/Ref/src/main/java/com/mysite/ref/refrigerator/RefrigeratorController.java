@@ -30,6 +30,7 @@ public class RefrigeratorController {
 	public ResponseEntity<String> createRefrigerator(@RequestHeader("Authorization") String authorizationHeader, @RequestBody RefrigeratorDTO dto) {
 		try {
 			String token = authorizationHeader.replace("Bearer ", "").trim();
+
 			refrigeratorService.createRef(dto, token);
 			return ResponseEntity.ok("냉장고가 성공적으로 생성되었습니다.");
 		}catch(Exception e) {
