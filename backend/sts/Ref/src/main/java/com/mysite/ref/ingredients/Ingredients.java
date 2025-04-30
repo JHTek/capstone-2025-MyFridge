@@ -33,7 +33,7 @@ public class Ingredients {
 	
 	@ManyToOne
 	@JoinColumn(name = "class_id")
-	private Class type;
+	private ClassEntity classEntity;
 	
 	@ManyToOne
 	@JoinColumn(name = "refrigerator_id")
