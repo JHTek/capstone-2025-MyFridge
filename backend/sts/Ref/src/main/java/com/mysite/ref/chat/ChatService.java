@@ -15,11 +15,11 @@ import jakarta.servlet.http.HttpSession;
 public class ChatService {
 
     private static final String PROJECT_ID = "test-nfsx"; // Google Cloud 프로젝트 ID
-    private static final String CREDENTIALS_PATH = "C:\\Users\\FORYOUCOM\\Downloads\\test-nfsx-20010a9880d9.json"; // 서비스 계정 키 경로
+    private static final String CREDENTIALS_PATH = "C:\\Users\\FORYOUCOM\\Downloads\\test-nfsx-20010a9880d9.json"; // 서비스 계정 키 경로 (개인 컴퓨터 경로로 지정)
     
-    public ChatResponse sendMessage(ChatRequest request, HttpSession httpSession) {
+    public ChatResponse sendMessage(ChatRequest request, String sessionId) {
         try {
-        	 String sessionId = httpSession.getId();
+        	
         	 
             String responseText = detectIntent(PROJECT_ID, sessionId, request.getMessage(), CREDENTIALS_PATH); //session 아이디 수정필요
             return new ChatResponse(responseText);

@@ -13,9 +13,9 @@ public class ChatController {
     private ChatService chatService;
 
     @PostMapping("/sendMessage")
-    public ResponseEntity<ChatResponse> sendMessage(@RequestBody ChatRequest request,  HttpSession session) {
+    public ResponseEntity<ChatResponse> sendMessage(@RequestBody ChatRequest request) {
         System.out.println("🔹 요청 도착: " + request.getMessage()); // 요청이 들어왔는지 확인
-        ChatResponse response = chatService.sendMessage(request, session);
+        ChatResponse response = chatService.sendMessage(request, request.getUserId());
         System.out.println("🔹 응답 반환: " + response.getReply()); // 응답이 정상적으로 생성되었는지 확인
         return ResponseEntity.ok(response);
     }
