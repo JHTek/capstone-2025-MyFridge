@@ -29,6 +29,8 @@ public class RefrigeratorController {
 	@PostMapping("/create")
 	public ResponseEntity<String> createRefrigerator(@RequestHeader("Authorization") String authorizationHeader, @RequestBody RefrigeratorDTO dto) {
 		try {
+			 System.out.println(">>> DTO received in controller: " + dto.getRefrigeratorName());
+			 
 			String token = authorizationHeader.replace("Bearer ", "").trim();
 			refrigeratorService.createRef(dto, token);
 			return ResponseEntity.ok("냉장고가 성공적으로 생성되었습니다.");
