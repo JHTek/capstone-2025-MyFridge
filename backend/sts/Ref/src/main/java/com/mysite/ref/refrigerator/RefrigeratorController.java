@@ -29,6 +29,8 @@ public class RefrigeratorController {
 	@PostMapping("/create")
 	public ResponseEntity<String> createRefrigerator(@RequestHeader("Authorization") String authorizationHeader, @RequestBody RefrigeratorDTO dto) {
 		try {
+			 System.out.println(">>> DTO received in controller: " + dto.getRefrigeratorName());
+			 
 			String token = authorizationHeader.replace("Bearer ", "").trim();
 
 			refrigeratorService.createRef(dto, token);
