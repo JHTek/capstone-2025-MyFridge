@@ -23,7 +23,7 @@ public class IngredientsService {
 	
 	@Transactional
 	 public void addIngredients(List<IngredientRequestDTO> ingredientsDtoList) {
-        Class defaultClass = classRepository.findById(1)//test용
+        ClassEntity defaultClass = classRepository.findById(2)//test용
         		.orElseThrow(() -> new IllegalArgumentException("Default class not found"));
         
 		for (IngredientRequestDTO dto : ingredientsDtoList) {
@@ -41,7 +41,7 @@ public class IngredientsService {
             ingredient.setRefrigerator(refrigerator);
             //ingredient.setType(type);
             
-            ingredient.setType(defaultClass); // test용
+            ingredient.setClassEntity(defaultClass); // test용
             ingredientsRepository.save(ingredient);
         }
     }
