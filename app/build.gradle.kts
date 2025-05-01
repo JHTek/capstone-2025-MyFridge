@@ -70,6 +70,7 @@ dependencies {
 
     //glide 이미지 라이브러리
     implementation ("com.github.bumptech.glide:glide:4.13.2")
+    implementation(libs.androidx.recyclerview)
     annotationProcessor ("com.github.bumptech.glide:compiler:4.13.2")
 
 

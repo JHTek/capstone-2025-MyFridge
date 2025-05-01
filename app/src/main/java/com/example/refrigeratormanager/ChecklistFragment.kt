@@ -23,6 +23,7 @@ class ChecklistFragment : Fragment() {
     ): View {
         _binding = FragmentChecklistBinding.inflate(inflater, container, false)
 
+
         // 항목 추가 버튼
         binding.btnAddItem.setOnClickListener {
             val itemText = binding.editChecklist.text.toString().trim()
@@ -33,6 +34,9 @@ class ChecklistFragment : Fragment() {
             } else {
                 Toast.makeText(requireContext(), "항목을 입력하세요", Toast.LENGTH_SHORT).show()
             }
+        }
+        binding.btnBack.setOnClickListener {
+            requireActivity().onBackPressedDispatcher.onBackPressed()
         }
 
         // 옵션 버튼 (팝업 메뉴)

@@ -10,6 +10,8 @@ object ProductManager {
         productMap[refrigeratorId] = products
     }
 
+
+
     // 제품 삭제
     fun removeProduct(refrigeratorId: Int, product: Product) {
         val originalList = productMap[refrigeratorId] ?: return

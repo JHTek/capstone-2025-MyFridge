@@ -136,40 +136,19 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
-            <ImageView
-                android:layout_width="0dp"
-                android:layout_height="150dp"
-                android:layout_weight="1"
-                android:scaleType="centerCrop" />
 
-            <ImageView
+
+            <TextView
                 android:layout_width="0dp"
                 android:layout_height="150dp"
                 android:layout_weight="1"
+                android:text="추후 추가 예정"
+                android:textColor="#FF0000"
                 android:scaleType="centerCrop"
                 android:layout_marginStart="8dp" />
         </LinearLayout>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:paddingTop="4dp">
 
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="소고기\n1일 남음"
-                android:textColor="#D9534F" />
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="우유\n3일 남음"
-                android:textColor="#F0AD4E" />
-        </LinearLayout>
 
         <!-- 체크리스트 타이틀 + 추가하기 버튼 한 줄에 배치 -->
         <LinearLayout

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/rootLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -7,18 +8,41 @@
     android:padding="24dp"
     android:background="#FFFFFF">
 
-    <!-- 타이틀 -->
-    <TextView
-        android:id="@+id/titleChecklist"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Checklist"
-        android:textSize="28sp"
-        android:textColor="#000000"
-        android:textStyle="bold"
-        android:layout_gravity="center_horizontal"
-        android:fontFamily="sans-serif-medium" />
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
+        <!-- 뒤로가기 버튼 -->
+        <ImageButton
+            android:id="@+id/btnBack"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:src="@drawable/btn_back"
+            android:contentDescription="뒤로 가기"
+            android:tint="#000000"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent" />
+
+        <!-- 가운데 타이틀 -->
+        <TextView
+            android:id="@+id/titleChecklist"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Checklist"
+            android:textSize="28sp"
+            android:textColor="#000000"
+            android:textStyle="bold"
+            android:fontFamily="sans-serif-medium"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <!-- "오늘의 체크리스트" 서브타이틀 -->
     <TextView
         android:id="@+id/subTitleChecklist"
         android:layout_width="wrap_content"
@@ -28,7 +52,6 @@
         android:textColor="#000000"
         android:layout_marginTop="4dp"
         android:layout_gravity="center_horizontal" />
-
     <!-- 옵션 버튼 -->
     <ImageButton
         android:id="@+id/btnOption"

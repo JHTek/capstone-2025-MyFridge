@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="8dp"
+    android:elevation="4dp">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="16dp">
+
+        <TextView
+            android:id="@+id/productName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Product Name"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/productQuantity"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Quantity: 0" />
+
+        <TextView
+            android:id="@+id/productExpirationDate"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Expiration Date: " />
+
+        <TextView
+            android:id="@+id/productRefrigeratorName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Refrigerator: " />
+
+    </LinearLayout>
+</androidx.cardview.widget.CardView>

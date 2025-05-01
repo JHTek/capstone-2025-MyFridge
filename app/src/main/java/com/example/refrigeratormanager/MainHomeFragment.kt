@@ -36,6 +36,9 @@ class MainHomeFragment : Fragment() {
             startActivity(Intent(requireContext(), CameraActivity::class.java))
         }
 
+        // 유통기한 더보기 이동
+
+
         // 체크리스트 추가 이동
         binding.btnAddChecklist.setOnClickListener {
             parentFragmentManager.beginTransaction()
