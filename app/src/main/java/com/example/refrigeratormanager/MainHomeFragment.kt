@@ -1,5 +1,6 @@
 package com.example.refrigeratormanager
 
+import com.example.refrigeratormanager.voiceAndgpt.chatGPTDTO.*
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -18,6 +19,15 @@ import androidx.fragment.app.Fragment
 import com.example.refrigeratormanager.databinding.FragmentMainHomeBinding
 import java.util.Locale
 import android.Manifest
+import android.util.Log
+import androidx.lifecycle.lifecycleScope
+import com.example.refrigeratormanager.voiceAndgpt.ChatGPTApi
+import kotlinx.coroutines.launch
+import org.json.JSONObject
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
+import androidx.appcompat.app.AlertDialog
+
 
 class MainHomeFragment : Fragment() {
     private var _binding: FragmentMainHomeBinding? = null
@@ -51,9 +61,7 @@ class MainHomeFragment : Fragment() {
             checkAudioPermissionAndStartSpeech()
         }
 
-
         // 유통기한 더보기 이동
-
 
         // 체크리스트 추가 이동
         binding.btnAddChecklist.setOnClickListener {
@@ -136,8 +144,9 @@ class MainHomeFragment : Fragment() {
                     ?.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION)
                     ?.firstOrNull()
                 if (resultText != null) {
-                    Toast.makeText(requireContext(), "음성 인식 결과: $resultText", Toast.LENGTH_SHORT).show()
-                    // 이후 여기에 ChatGPT API 호출 추가 가능
+                    //Toast.makeText(requireContext(), "음성 인식 결과: $resultText", Toast.LENGTH_SHORT).show()
+                    // 🧠 ChatGPT 호출 연결
+                    callChatGPT(resultText)
                 }
             }
 
@@ -157,6 +166,85 @@ class MainHomeFragment : Fragment() {
 
         recognizer.startListening(intent)
     }
+
+    private fun callChatGPT(ingredientInput: String) {
+        val retrofit = Retrofit.Builder()
+            .baseUrl("https://api.openai.com/")
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+
+        val api = retrofit.create(ChatGPTApi::class.java)
+
+        val messages = listOf(
+            Message("system", "너는 식재료 등록을 도와주는 어시스턴트야. 사용자의 문장에서 식재료명과 갯수를 JSON 형태로 추출해줘. 예: '감자 3개, 당근 2개' → {\"감자\": 3, \"당근\": 2}. 다른 말은 절대 하지 마."),
+            Message("user", ingredientInput)
+        )
+
+        val request = ChatRequest(messages = messages)
+
+        lifecycleScope.launch {
+            try {
+                val response = api.getChatResponse("Bearer ${BuildConfig.OPENAI_API_KEY}", request)
+                val reply = response.choices.firstOrNull()?.message?.content
+
+                if (reply != null) {
+                    val parsedMap = parseServerResponse(reply)
+                    if (parsedMap.isNotEmpty()) {
+                        showResponseDialog("GPT 응답", reply) {
+                            moveToProductUpload(parsedMap)
+                        }
+                    } else {
+                        showResponseDialog("GPT 응답 실패", "JSON 파싱 실패: $reply")
+                    }
+                }
+            } catch (e: Exception) {
+                Toast.makeText(requireContext(), "GPT 호출 실패: ${e.message}", Toast.LENGTH_SHORT).show()
+
+                // 🧪 [임시 하드코딩 시작]
+                val simulatedReply = """{"사과": 2, "바나나": 3}"""
+                val parsedMap = parseServerResponse(simulatedReply)
+                showResponseDialog("임시 응답 (GPT 실패)", simulatedReply) {
+                    moveToProductUpload(parsedMap)
+                }
+                // 🧪 [임시 하드코딩 끝]
+            }
+        }
+    }
+
+    private fun parseServerResponse(response: String): Map<String, Int> {
+        return try {
+            val jsonObject = JSONObject(response)
+            val resultMap = mutableMapOf<String, Int>()
+            jsonObject.keys().forEach { key ->
+                resultMap[key] = jsonObject.getInt(key)
+            }
+            resultMap
+        } catch (e: Exception) {
+            Log.e("MainHomeFragment", "JSON 파싱 오류", e)
+            emptyMap()
+        }
+    }
+
+    private fun showResponseDialog(title: String, message: String, onDismiss: (() -> Unit)? = null) {
+        AlertDialog.Builder(requireContext())
+            .setTitle(title)
+            .setMessage(message)
+            .setPositiveButton("확인") { _, _ ->
+                onDismiss?.invoke()
+            }
+            .show()
+    }
+
+    private fun moveToProductUpload(data: Map<String, Int>) {
+        val fragment = ProductUploadFragment().apply {
+            arguments = Bundle().apply {
+                putSerializable("productData", HashMap(data)) // Serializable로 전달
+            }
+        }
+
+        fragment.show(parentFragmentManager, "ProductUploadFragment")
+    }
+
 
     override fun onRequestPermissionsResult(
         requestCode: Int, permissions: Array<out String>, grantResults: IntArray

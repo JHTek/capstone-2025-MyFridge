@@ -1,7 +1,19 @@
+import java.util.Properties
+import java.io.FileInputStream
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
 }
+
+val localProperties = Properties()
+val localPropertiesFile = rootProject.file("local.properties")
+if (localPropertiesFile.exists()) {
+    localProperties.load(FileInputStream(localPropertiesFile))
+}
+
+val OPENAI_API_KEY: String = localProperties.getProperty("OPENAI_API_KEY") ?: ""
+val SERVER_IP: String = localProperties.getProperty("SERVER_IP") ?: ""
 
 android {
     namespace = "com.example.refrigeratormanager"
@@ -9,6 +21,7 @@ android {
 
     buildFeatures {
         viewBinding = true
+        buildConfig = true
     }
 
     defaultConfig {
@@ -19,6 +32,8 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        buildConfigField("String", "OPENAI_API_KEY", "\"$OPENAI_API_KEY\"")
+        buildConfigField("String", "SERVER_IP", "\"$SERVER_IP\"")
     }
 
     buildTypes {
