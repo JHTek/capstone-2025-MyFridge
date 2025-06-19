@@ -33,6 +33,7 @@ class MainHomeFragment : Fragment() {
     private var _binding: FragmentMainHomeBinding? = null
     private val binding get() = _binding!!
     private val RECORD_AUDIO_PERMISSION_CODE = 101
+    private var listeningDialog: AlertDialog? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -58,6 +59,7 @@ class MainHomeFragment : Fragment() {
 
         // 음성 버튼 클릭 시 음성 인식 시작
         binding.btnVoice.setOnClickListener {
+            showListeningDialog() // 🎤 듣는 중 대화상자 표시
             checkAudioPermissionAndStartSpeech()
         }
 
@@ -144,13 +146,15 @@ class MainHomeFragment : Fragment() {
                     ?.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION)
                     ?.firstOrNull()
                 if (resultText != null) {
-                    //Toast.makeText(requireContext(), "음성 인식 결과: $resultText", Toast.LENGTH_SHORT).show()
-                    // 🧠 ChatGPT 호출 연결
                     callChatGPT(resultText)
+                } else {
+                    dismissListeningDialog()
+                    Toast.makeText(requireContext(), "음성 인식 결과가 없습니다.", Toast.LENGTH_SHORT).show()
                 }
             }
 
             override fun onError(error: Int) {
+                dismissListeningDialog()
                 Toast.makeText(requireContext(), "음성 인식 실패: $error", Toast.LENGTH_SHORT).show()
             }
 
@@ -176,7 +180,7 @@ class MainHomeFragment : Fragment() {
         val api = retrofit.create(ChatGPTApi::class.java)
 
         val messages = listOf(
-            Message("system", "너는 식재료 등록을 도와주는 어시스턴트야. 사용자의 문장에서 식재료명과 갯수를 JSON 형태로 추출해줘. 예: '감자 3개, 당근 2개' → {\"감자\": 3, \"당근\": 2}. 다른 말은 절대 하지 마."),
+            Message("system", "너는 식재료 등록을 도와주는 어시스턴트야. 사용자의 문장에서 식재료명과 갯수를 JSON 형태로 추출해줘. 예: '감자 3개, 당근 2개 샀어' → {\"감자\": 3, \"당근\": 2}. 다른 말은 절대 하지 마."),
             Message("user", ingredientInput)
         )
 
@@ -190,24 +194,19 @@ class MainHomeFragment : Fragment() {
                 if (reply != null) {
                     val parsedMap = parseServerResponse(reply)
                     if (parsedMap.isNotEmpty()) {
-                        showResponseDialog("GPT 응답", reply) {
-                            moveToProductUpload(parsedMap)
-                        }
+                        dismissListeningDialog() // ✅ 응답 성공 시 대화상자 닫기
+                        moveToProductUpload(parsedMap)
                     } else {
+                        dismissListeningDialog()
                         showResponseDialog("GPT 응답 실패", "JSON 파싱 실패: $reply")
                     }
                 }
-            } catch (e: Exception) {
-                Toast.makeText(requireContext(), "GPT 호출 실패: ${e.message}", Toast.LENGTH_SHORT).show()
 
-                // 🧪 [임시 하드코딩 시작]
-                val simulatedReply = """{"사과": 2, "바나나": 3}"""
-                val parsedMap = parseServerResponse(simulatedReply)
-                showResponseDialog("임시 응답 (GPT 실패)", simulatedReply) {
-                    moveToProductUpload(parsedMap)
-                }
-                // 🧪 [임시 하드코딩 끝]
+            } catch (e: Exception) {
+                dismissListeningDialog()
+                Toast.makeText(requireContext(), "GPT 호출 실패: ${e.message}", Toast.LENGTH_SHORT).show()
             }
+
         }
     }
 
@@ -245,6 +244,19 @@ class MainHomeFragment : Fragment() {
         fragment.show(parentFragmentManager, "ProductUploadFragment")
     }
 
+    private fun showListeningDialog() {
+        listeningDialog = AlertDialog.Builder(requireContext())
+            .setTitle("음성 인식 중")
+            .setMessage("말씀하신 내용을 인식하고 있어요...")
+            .setCancelable(false)
+            .create()
+        listeningDialog?.show()
+    }
+
+    private fun dismissListeningDialog() {
+        listeningDialog?.dismiss()
+        listeningDialog = null
+    }
 
     override fun onRequestPermissionsResult(
         requestCode: Int, permissions: Array<out String>, grantResults: IntArray
