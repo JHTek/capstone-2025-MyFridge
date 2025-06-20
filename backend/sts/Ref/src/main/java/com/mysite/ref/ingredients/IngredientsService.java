@@ -58,7 +58,13 @@ public class IngredientsService {
 					dto.setExpirationDate(ingredient.getExpirationDate());
 					dto.setStorageLocation(ingredient.getStorageLocation());
 					dto.setRefrigeratorName(ingredient.getRefrigerator().getRefrigeratorName()); // Refrigerator 엔티티의 이름을 가져옴
-					return dto;
+					if (ingredient.getClassEntity() != null) {
+		                dto.setCategory(ingredient.getClassEntity().getCategory());
+		            } else {
+		                dto.setCategory("기타"); // 기본값 설정
+		            }
+		            
+		            return dto;
 				})
 				.collect(Collectors.toList());
 	}
