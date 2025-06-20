@@ -7,9 +7,12 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.EditorInfo
+import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import com.bumptech.glide.Glide
 import com.example.refrigeratormanager.ApiClient
+import com.example.refrigeratormanager.R
 import com.example.refrigeratormanager.databinding.FragmentRecipeBinding
 import retrofit2.Call
 import retrofit2.Callback
@@ -38,6 +41,29 @@ class RecipeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        // 키보드에서 검색 버튼 눌렀을 때 처리
+        binding.editTextSearch.setOnEditorActionListener { _, actionId, _ ->
+            if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                val keyword = binding.editTextSearch.text.toString().trim()
+                if (keyword.isNotEmpty()) {
+                    searchRecipesFromServer(keyword)
+                    hideKeyboard()
+                }
+                true
+            } else {
+                false
+            }
+        }
+
+        // 돋보기 버튼 클릭 처리
+        binding.imageSearchIcon.setOnClickListener {
+            val keyword = binding.editTextSearch.text.toString().trim()
+            if (keyword.isNotEmpty()) {
+                searchRecipesFromServer(keyword)
+                hideKeyboard()
+            }
+        }
+
         binding.imageSearchIcon.setOnClickListener {
             val keyword = binding.editTextSearch.text.toString().trim()
             if (keyword.isNotEmpty()) {
@@ -52,7 +78,7 @@ class RecipeFragment : Fragment() {
             IngredientSection(
                 "양파", listOf(
                     Recipe(
-                        name = "중화풍 마파두부 덮밥",
+                        recipe_name = "중화풍 마파두부 덮밥",
                         thumbnail = "https://recipe1.ezmember.co.kr/cache/recipe/2015/05/18/48091bec0fcebd49cd4b979735068298.jpg",
                         id = "1",
                         url = "1",
@@ -65,7 +91,7 @@ class RecipeFragment : Fragment() {
 
                     ),
                     Recipe(
-                        name = "떡볶이", thumbnail = "https://recipe1.ezmember.co.kr/cache/recipe/2018/01/15/593e123714a3af6752388583567427cb1_m.jpg",
+                        recipe_name = "떡볶이", thumbnail = "https://recipe1.ezmember.co.kr/cache/recipe/2018/01/15/593e123714a3af6752388583567427cb1_m.jpg",
                         id = "1",
                         url = "1",
                         ingredients = listOf(
@@ -80,7 +106,7 @@ class RecipeFragment : Fragment() {
             IngredientSection(
                 "시금치", listOf(
                     Recipe(
-                        name = "두부시금치무침",
+                        recipe_name = "두부시금치무침",
                         thumbnail = "https://recipe1.ezmember.co.kr/cache/recipe/2016/12/08/34ba5bf522b2964e97b70dcd5b62dcb31_m.jpg",
                         id ="1",
                         url = "1",
@@ -92,7 +118,7 @@ class RecipeFragment : Fragment() {
                         )
                     ),
                     Recipe(
-                        name = "건새우 시금치 된장국",
+                        recipe_name = "건새우 시금치 된장국",
                         thumbnail = "https://recipe1.ezmember.co.kr/cache/recipe/2015/10/20/895c415659fff90e1f493ab1d86357731_m.jpg",
                         id = "1",
                         url = "1",
@@ -113,8 +139,8 @@ class RecipeFragment : Fragment() {
 
     private fun bindSection1(section: IngredientSection) {
         binding.textOnionTitle.text = "${section.ingredientName}를 사용하는 추천 요리"
-        binding.textOnionRecipe1.text = section.recipes[0].name
-        binding.textOnionRecipe2.text = section.recipes[1].name
+        binding.textOnionRecipe1.text = section.recipes[0].recipe_name
+        binding.textOnionRecipe2.text = section.recipes[1].recipe_name
 
         Glide.with(this)
             .load(section.recipes[0].thumbnail)
@@ -129,18 +155,18 @@ class RecipeFragment : Fragment() {
         }
 
         binding.imageOnionRecipe1.setOnClickListener {
-            Toast.makeText(requireContext(), "${section.recipes[0].name} 클릭됨", Toast.LENGTH_SHORT).show()
+            Toast.makeText(requireContext(), "${section.recipes[0].recipe_name} 클릭됨", Toast.LENGTH_SHORT).show()
         }
 
         binding.imageOnionRecipe2.setOnClickListener {
-            Toast.makeText(requireContext(), "${section.recipes[1].name} 클릭됨", Toast.LENGTH_SHORT).show()
+            Toast.makeText(requireContext(), "${section.recipes[1].recipe_name} 클릭됨", Toast.LENGTH_SHORT).show()
         }
     }
 
     private fun bindSection2(section: IngredientSection) {
         binding.textSpinachTitle.text = "${section.ingredientName}를 사용하는 추천 요리"
-        binding.textSpinachRecipe1.text = section.recipes[0].name
-        binding.textSpinachRecipe2.text = section.recipes[1].name
+        binding.textSpinachRecipe1.text = section.recipes[0].recipe_name
+        binding.textSpinachRecipe2.text = section.recipes[1].recipe_name
 
         Glide.with(this)
             .load(section.recipes[0].thumbnail)
@@ -155,63 +181,35 @@ class RecipeFragment : Fragment() {
         }
 
         binding.imageSpinachRecipe1.setOnClickListener {
-            Toast.makeText(requireContext(), "${section.recipes[0].name} 클릭됨", Toast.LENGTH_SHORT).show()
+            Toast.makeText(requireContext(), "${section.recipes[0].recipe_name} 클릭됨", Toast.LENGTH_SHORT).show()
         }
 
         binding.imageSpinachRecipe2.setOnClickListener {
-            Toast.makeText(requireContext(), "${section.recipes[1].name} 클릭됨", Toast.LENGTH_SHORT).show()
+            Toast.makeText(requireContext(), "${section.recipes[1].recipe_name} 클릭됨", Toast.LENGTH_SHORT).show()
         }
+    }
+
+    private fun moveToSearchResultFragment(keyword: String) {
+        val fragment = SearchResultFragment().apply {
+            arguments = Bundle().apply {
+                putString("keyword", keyword)
+            }
+        }
+
+        parentFragmentManager.beginTransaction()
+            .replace(R.id.fragmentContainer, fragment)
+            .addToBackStack(null)
+            .commit()
     }
 
     //검색 요청 함수
     private fun searchRecipesFromServer(keyword: String) {
-        val token = getToken()
-        Log.d("RecipeSearch", "토큰: $token")
-        if (token == null) {
-            Toast.makeText(requireContext(), "로그인 정보가 없습니다", Toast.LENGTH_SHORT).show()
-            return
-        }
-
-        val authHeader = "Bearer $token"
-        recipeApi.searchRecipes(authHeader, keyword).enqueue(object : Callback<List<Recipe>> {
-            override fun onResponse(call: Call<List<Recipe>>, response: Response<List<Recipe>>) {
-                Log.d("RecipeSearch", "응답 코드: ${response.code()}")
-                Log.d("RecipeSearch", "응답 메시지: ${response.message()}")
-                Log.d("RecipeSearch", "요청 URL: ${call.request().url}")
-                Log.d("RecipeSearch", "요청 헤더: ${call.request().headers}")
-
-                if (response.isSuccessful) {
-                    val recipes = response.body() ?: emptyList()
-                    displaySearchResults(recipes)
-                } else {
-                    Toast.makeText(requireContext(), "서버 오류 (${response.code()})", Toast.LENGTH_SHORT).show()
-                }
-            }
-
-            override fun onFailure(call: Call<List<Recipe>>, t: Throwable) {
-                Log.e("RecipeSearch", "연결 실패", t) // ✅ 전체 스택트레이스 출력
-                Toast.makeText(requireContext(), "연결 실패: ${t.message}", Toast.LENGTH_SHORT).show()
-            }
-
-        })
+        moveToSearchResultFragment(keyword)
     }
 
-    //응답을 화면에 반영
-    private fun displaySearchResults(recipes: List<Recipe>) {
-        if (recipes.isEmpty()) {
-            binding.textOnionTitle.text = "검색 결과 없음"
-            binding.textOnionRecipe1.text = ""
-            binding.textOnionRecipe2.text = ""
-            binding.imageOnionRecipe1.setImageDrawable(null)
-            binding.imageOnionRecipe2.setImageDrawable(null)
-            return
-        }
-
-        binding.textOnionTitle.text = "검색 결과"
-        binding.textOnionRecipe1.text = recipes.getOrNull(0)?.name ?: ""
-        binding.textOnionRecipe2.text = recipes.getOrNull(1)?.name ?: ""
-
-        Glide.with(this).load(recipes.getOrNull(0)?.thumbnail).into(binding.imageOnionRecipe1)
-        Glide.with(this).load(recipes.getOrNull(1)?.thumbnail).into(binding.imageOnionRecipe2)
+    private fun hideKeyboard() {
+        val imm = requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        imm.hideSoftInputFromWindow(binding.editTextSearch.windowToken, 0)
     }
+
 }

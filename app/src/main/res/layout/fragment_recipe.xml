@@ -27,7 +27,9 @@
                 android:layout_weight="1"
                 android:background="@android:color/transparent"
                 android:hint="찾고싶은 요리이름 검색"
-                android:textSize="14sp" />
+                android:textSize="14sp"
+                android:inputType="text"
+                android:imeOptions="actionSearch"/>
 
             <ImageView
                 android:id="@+id/imageSearchIcon"

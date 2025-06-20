@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/searchResultLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#FFFFFF"
+    android:padding="16dp">
+
+    <!-- 🔍 검색창 -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:background="#F5F5F5"
+        android:paddingHorizontal="12dp"
+        android:gravity="center_vertical"
+        android:layout_marginBottom="16dp">
+
+        <EditText
+            android:id="@+id/editTextSearch"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@android:color/transparent"
+            android:hint="찾고싶은 요리이름 검색"
+            android:textSize="14sp"
+            android:inputType="text"
+            android:imeOptions="actionSearch" />
+
+        <ImageView
+            android:id="@+id/imageSearchIcon"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@drawable/ic_search"
+            android:contentDescription="검색 아이콘" />
+    </LinearLayout>
+
+    <!-- 🔽 검색 결과 텍스트 -->
+    <TextView
+        android:id="@+id/textSearchResultTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="검색 결과"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:textColor="@android:color/black"
+        android:layout_marginBottom="8dp" />
+
+    <!-- 🔄 결과 카드 리스트 -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerViewSearchResults"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:clipToPadding="false"
+        android:scrollbars="vertical"
+        android:padding="4dp"/>
+</LinearLayout>
