@@ -1,6 +1,4 @@
-package com.example.refrigeratormanager
-
-import org.threeten.bp.LocalDate
+package com.example.refrigeratormanager.ingredients
 
 data class IngredientRequestDTO(
     val refrigeratorId: Int,

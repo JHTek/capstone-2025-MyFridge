@@ -1,4 +1,4 @@
-package com.example.refrigeratormanager
+package com.example.refrigeratormanager.ingredients
 
 data class IngredientResponseDTO(
     val ingredientsId: Int,
@@ -6,5 +6,6 @@ data class IngredientResponseDTO(
     val quantity: Int,
     val expirationDate: String,
     val storageLocation: Int,
-    val refrigeratorName: String
+    val refrigeratorName: String,
+    val category: String
 )

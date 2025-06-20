@@ -41,8 +41,12 @@ class SearchResultFragment : Fragment() {
 
         // ✅ RecyclerView 설정 (유지)
         adapter = SearchResultAdapter(recipeList) { recipe ->
-            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(recipe.url))
-            startActivity(intent)
+            if (recipe.url.isNullOrBlank()) {
+                Toast.makeText(requireContext(), "레시피 링크가 없습니다", Toast.LENGTH_SHORT).show()
+            } else {
+                val intent = Intent(Intent.ACTION_VIEW, Uri.parse(recipe.url))
+                startActivity(intent)
+            }
         }
         binding.recyclerViewSearchResults.layoutManager = GridLayoutManager(requireContext(), 2)
         binding.recyclerViewSearchResults.adapter = adapter

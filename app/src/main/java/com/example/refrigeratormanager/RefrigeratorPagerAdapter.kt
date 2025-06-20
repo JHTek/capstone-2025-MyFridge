@@ -3,6 +3,9 @@ package com.example.refrigeratormanager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
+import com.example.refrigeratormanager.ingredients.FrozenFragment
+import com.example.refrigeratormanager.ingredients.RefrigeratedFragment
+import com.example.refrigeratormanager.ingredients.RoomTempFragment
 
 class RefrigeratorPagerAdapter(
     activity: AppCompatActivity,

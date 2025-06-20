@@ -5,10 +5,16 @@
     android:padding="16dp">
 
     <!-- 제품 목록을 담을 LinearLayout -->
-    <LinearLayout
+    <GridLayout
         android:id="@+id/productContainer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical" />
+        android:columnCount="3"
+        android:orientation="horizontal"
+        android:padding="8dp"
+        android:useDefaultMargins="true"
+        android:alignmentMode="alignMargins"
+        android:layout_gravity="center_horizontal" />
+
 
 </ScrollView>

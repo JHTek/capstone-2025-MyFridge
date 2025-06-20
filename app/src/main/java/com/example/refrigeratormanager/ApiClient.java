@@ -1,10 +1,8 @@
 package com.example.refrigeratormanager;
 
-import static java.sql.DriverManager.println;
-
 import android.util.Log;
 
-import com.example.refrigeratormanager.api.IngredientApi;
+import com.example.refrigeratormanager.ingredients.IngredientApi;
 import com.example.refrigeratormanager.recipe.RecipeApi;
 
 import retrofit2.Retrofit;

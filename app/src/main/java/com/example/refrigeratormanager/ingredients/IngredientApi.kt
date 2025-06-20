@@ -1,8 +1,6 @@
-package com.example.refrigeratormanager.api
+package com.example.refrigeratormanager.ingredients
 
 import com.example.refrigeratormanager.DTO.ApiResponse
-import com.example.refrigeratormanager.IngredientRequestDTO
-import com.example.refrigeratormanager.IngredientResponseDTO
 import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.GET

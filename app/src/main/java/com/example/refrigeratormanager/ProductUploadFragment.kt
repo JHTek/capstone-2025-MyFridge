@@ -13,8 +13,7 @@ import android.widget.*
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.viewModels
 import com.example.refrigeratormanager.DTO.ApiResponse
-import com.example.refrigeratormanager.IngredientRequestDTO
-import com.example.refrigeratormanager.ApiClient
+import com.example.refrigeratormanager.ingredients.IngredientRequestDTO
 import com.example.refrigeratormanager.databinding.FragmentProductUploadBinding
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -24,7 +23,6 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import java.util.*
-import org.threeten.bp.LocalDate
 
 class ProductUploadFragment : DialogFragment() {
 
