@@ -39,6 +39,8 @@ public class ClassDataLoader implements CommandLineRunner {
                 ClassEntity classEntity = new ClassEntity();
                 classEntity.setClassId(ingredient.getId());
                 classEntity.setClassName(ingredient.getName());
+                classEntity.setCategory(ingredient.getCategory()); 
+                classEntity.setShelfLife(ingredient.getShelf_life()); 
                 classRepository.save(classEntity);
             }
         }
@@ -52,6 +54,8 @@ public class ClassDataLoader implements CommandLineRunner {
         private String name;
         private List<String> info;
         private List<String> trim;
+        private int shelf_life;
+        private String category;   
 
         // Getters (필요한 필드만)
         public int getId() {
@@ -60,5 +64,7 @@ public class ClassDataLoader implements CommandLineRunner {
         public String getName() {
             return name;
         }
+        public int getShelf_life() { return shelf_life; }
+        public String getCategory() { return category; }
     }
 }

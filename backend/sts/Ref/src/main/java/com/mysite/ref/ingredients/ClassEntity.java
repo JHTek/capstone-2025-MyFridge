@@ -18,6 +18,10 @@ public class ClassEntity {
 	
 	private String className;
 	
+	private String category;
+	
+	private int shelfLife;
+	
 	@OneToMany(mappedBy = "classEntity")
 	private List<Ingredients> ingredients = new ArrayList<>();;
 

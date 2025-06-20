@@ -14,5 +14,6 @@ public class IngredientResponseDTO {
     private LocalDate expirationDate;
     private int storageLocation;
     private String refrigeratorName; // Refrigerator 엔티티의 이름을 저장할 필드
+    private String category;
     
 }
