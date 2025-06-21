@@ -1,4 +1,4 @@
-package com.example.refrigeratormanager
+package com.example.refrigeratormanager.product
 
 data class Product(
     val refrigeratorId: Int,   // 냉장고 ID

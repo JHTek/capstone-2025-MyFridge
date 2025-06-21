@@ -1,6 +1,4 @@
-package com.example.refrigeratormanager
-
-import java.util.*
+package com.example.refrigeratormanager.product
 
 object ProductManager {
     private val productList = mutableListOf<Product>()

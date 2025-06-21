@@ -7,16 +7,18 @@ import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import androidx.viewbinding.ViewBinding
-import com.example.refrigeratormanager.Product
-import com.example.refrigeratormanager.ProductManager
-import com.example.refrigeratormanager.ProductRepository
+import com.example.refrigeratormanager.product.Product
+import com.example.refrigeratormanager.product.ProductManager
+import com.example.refrigeratormanager.product.ProductRepository
 import com.example.refrigeratormanager.R
+import com.example.refrigeratormanager.product.ProductAdapter
 
 abstract class BaseIngredientFragment<VB : ViewBinding> : Fragment() {
     protected lateinit var binding: VB
@@ -73,35 +75,21 @@ abstract class BaseIngredientFragment<VB : ViewBinding> : Fragment() {
     }
 
     private fun displayProducts() {
-        Log.d("DEBUG", "✅ displayProducts() 호출됨")
-        val container = (binding.root.findViewById<ViewGroup>(R.id.productContainer))
-        container.removeAllViews()
+        val products = ProductManager.getSortedProductsByExpiration(refrigeratorId).getOrNull(storageIndex) ?: emptyList()
 
-        val products = ProductManager.getSortedProductsByExpiration(refrigeratorId).getOrNull(storageIndex)
-        Log.d("DEBUG", "✅ 받아온 제품 수: ${products?.size ?: 0}")
-        if (!products.isNullOrEmpty()) {
-            products.forEach { product ->
-                val view = layoutInflater.inflate(R.layout.item_product_with_image, container, false)
+        val recyclerView = binding.root.findViewById<RecyclerView>(R.id.productRecyclerView)
+        val noProductsText = binding.root.findViewById<TextView>(R.id.textNoProducts)
 
-                Log.d("DEBUG", "➡️ 제품 추가: ${product.ingredientsName}")
+        if (products.isNotEmpty()) {
+            recyclerView.visibility = View.VISIBLE
+            noProductsText.visibility = View.GONE
 
-                view.findViewById<ImageView>(R.id.categoryImageView).setImageResource(ImageUtils.getImageResourceForCategory(product.category))
-                view.findViewById<TextView>(R.id.productNameTextView).text = product.ingredientsName
-//                view.findViewById<TextView>(R.id.quantityTextView).text = "수량: ${product.quantity}"
-//                view.findViewById<TextView>(R.id.expirationDateTextView).text = "유통기한: ${product.expirationDate}"
-//                view.findViewById<Button>(R.id.deleteButton).setOnClickListener {
-//                    ProductManager.removeProduct(refrigeratorId, product)
-//                    displayProducts()
-//                }
-                container.addView(view)
-            }
+            recyclerView.layoutManager = GridLayoutManager(requireContext(), 3)
+            recyclerView.adapter = ProductAdapter(products)
         } else {
-            val noProductsText = TextView(requireContext()).apply {
-                text = "제품이 없습니다."
-                gravity = Gravity.CENTER
-                textSize = 16f
-            }
-            container.addView(noProductsText)
+            recyclerView.visibility = View.GONE
+            noProductsText.visibility = View.VISIBLE
         }
     }
+
 }

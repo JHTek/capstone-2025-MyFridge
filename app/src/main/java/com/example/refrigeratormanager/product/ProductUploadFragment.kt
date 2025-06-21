@@ -1,4 +1,4 @@
-package com.example.refrigeratormanager
+package com.example.refrigeratormanager.product
 
 import android.app.AlertDialog
 import android.app.DatePickerDialog
@@ -12,7 +12,12 @@ import android.view.View
 import android.widget.*
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.viewModels
+import com.example.refrigeratormanager.ApiClient
 import com.example.refrigeratormanager.DTO.ApiResponse
+import com.example.refrigeratormanager.HomeActivity
+import com.example.refrigeratormanager.R
+import com.example.refrigeratormanager.Refrigerator
+import com.example.refrigeratormanager.RefrigeratorViewModel
 import com.example.refrigeratormanager.ingredients.IngredientRequestDTO
 import com.example.refrigeratormanager.databinding.FragmentProductUploadBinding
 import kotlinx.coroutines.CoroutineScope

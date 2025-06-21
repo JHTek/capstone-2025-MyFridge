@@ -1,5 +1,6 @@
-package com.example.refrigeratormanager
+package com.example.refrigeratormanager.product
 
+import com.example.refrigeratormanager.ApiClient
 import com.example.refrigeratormanager.ingredients.IngredientResponseDTO
 import retrofit2.Call
 import retrofit2.Callback

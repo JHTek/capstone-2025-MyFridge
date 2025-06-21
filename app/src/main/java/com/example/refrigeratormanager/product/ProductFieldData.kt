@@ -1,4 +1,4 @@
-package com.example.refrigeratormanager
+package com.example.refrigeratormanager.product
 
 data class ProductFieldData(
     val productName: String,

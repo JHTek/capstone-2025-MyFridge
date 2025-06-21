@@ -1,14 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:padding="16dp">
+    android:layout_height="match_parent">
 
-    <!-- 제품 목록을 담을 LinearLayout -->
-    <LinearLayout
-        android:id="@+id/productContainer"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/productRecyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="16dp"
+        android:clipToPadding="false" />
+
+    <TextView
+        android:id="@+id/textNoProducts"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical" />
-
-</ScrollView>
+        android:text="제품이 없습니다."
+        android:textSize="16sp"
+        android:gravity="center"
+        android:layout_gravity="center"
+        android:visibility="gone" />
+</FrameLayout>

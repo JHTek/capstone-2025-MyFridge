@@ -1,14 +1,11 @@
 package com.example.refrigeratormanager
 
-import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
-import android.widget.TextView
-import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.viewpager2.widget.ViewPager2
 import com.example.refrigeratormanager.databinding.ActivityCameraBinding
-import com.google.android.material.tabs.TabLayout
+import com.example.refrigeratormanager.product.ProductUploadFragment
 import com.google.android.material.tabs.TabLayoutMediator
 
 class CameraActivity : AppCompatActivity(), ManualInputFragment.ManualInputListener {
