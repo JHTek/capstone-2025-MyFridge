@@ -41,7 +41,7 @@ class NotificationActivity : AppCompatActivity() {
         binding.rvNotificationList.layoutManager = LinearLayoutManager(this)
         binding.rvNotificationList.adapter = adapter
 
-        // ✅ 스와이프 삭제 기능 추가
+        // 스와이프 삭제 기능
         val itemTouchHelperCallback = object : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT) {
             override fun onMove(
                 recyclerView: RecyclerView,
@@ -53,7 +53,6 @@ class NotificationActivity : AppCompatActivity() {
                 val position = viewHolder.adapterPosition
                 val removedItem = adapter.items[position]
 
-                // RecyclerView에서 제거
                 adapter.items.removeAt(position)
                 adapter.notifyItemRemoved(position)
 
@@ -66,7 +65,6 @@ class NotificationActivity : AppCompatActivity() {
                 prefs.edit().putString("alert_log", updatedLog).apply()
             }
         }
-
         ItemTouchHelper(itemTouchHelperCallback).attachToRecyclerView(binding.rvNotificationList)
     }
 }

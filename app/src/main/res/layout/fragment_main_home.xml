@@ -10,7 +10,8 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        >
 
         <!-- Title -->
 
@@ -24,11 +25,12 @@
             android:textSize="28dp"
             android:textStyle="bold" />
 
+        <!-- 유통기한 임박 타이틀 + 더보기 버튼 한 줄에 배치 -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
             android:gravity="center"
+            android:orientation="horizontal"
             android:weightSum="3">
 
             <LinearLayout
@@ -59,12 +61,12 @@
                 android:id="@+id/btnCamera"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:orientation="vertical"
-                android:gravity="center"
                 android:layout_margin="10dp"
-                android:padding="10dp"
-                android:background="@drawable/box_background">
+                android:layout_weight="1"
+                android:background="@drawable/box_background"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:padding="10dp">
 
                 <ImageView
                     android:layout_width="50dp"
@@ -74,21 +76,21 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:paddingTop="4dp"
                     android:text="카메라"
-                    android:textSize="18dp"
-                    android:paddingTop="4dp" />
+                    android:textSize="18dp" />
             </LinearLayout>
 
             <LinearLayout
                 android:id="@+id/btnVoice"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:orientation="vertical"
-                android:gravity="center"
                 android:layout_margin="10dp"
-                android:padding="10dp"
-                android:background="@drawable/box_background">
+                android:layout_weight="1"
+                android:background="@drawable/box_background"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:padding="10dp">
 
                 <ImageView
                     android:layout_width="48dp"
@@ -98,13 +100,12 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:paddingTop="4dp"
                     android:text="음성"
-                    android:textSize="18dp"
-                    android:paddingTop="4dp" />
+                    android:textSize="18dp" />
             </LinearLayout>
         </LinearLayout>
 
-        <!-- 유통기한 임박 타이틀 + 더보기 버튼 한 줄에 배치 -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
