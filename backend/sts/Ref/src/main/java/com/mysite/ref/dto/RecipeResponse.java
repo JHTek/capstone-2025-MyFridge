@@ -16,18 +16,26 @@ public class RecipeResponse {
     private String thumbnail;
     private String cookTime;
     private List<IngredientInfo> ingredients;
+    private List<RecipeOrderDto> recipeOrders;
+
+
 
     public static RecipeResponse from(Recipe recipe) {
         List<IngredientInfo> ingredients = recipe.getIngreLists().stream()
             .map(IngredientInfo::from)
             .collect(Collectors.toList());
+        
+        List<RecipeOrderDto> recipeOrders = recipe.getRecipeOrders().stream()
+        	    .map(RecipeOrderDto::from)
+        	    .collect(Collectors.toList());
 
         return new RecipeResponse(
-            recipe.getRecipeId(),
-            recipe.getRecipeName(),
-            recipe.getThumbnail(),
-            recipe.getCookTime(),
-            ingredients
-        );
+        	    recipe.getRecipeId(),
+        	    recipe.getRecipeName(),
+        	    recipe.getThumbnail(),
+        	    recipe.getCookTime(),
+        	    ingredients,
+        	    recipeOrders
+        	);
     }
 }

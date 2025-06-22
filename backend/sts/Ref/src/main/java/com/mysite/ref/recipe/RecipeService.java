@@ -59,8 +59,10 @@ public class RecipeService {
 }
     
     // 3. 레시피 상세 정보 조회
-    public Recipe getRecipeDetail(String recipeId) {
-        return recipeRepository.findById(recipeId)
-            .orElseThrow(() -> new EntityNotFoundException("Recipe not found with id: " + recipeId));
-    }
+	public Recipe getRecipeDetail(String recipeId) {
+		
+	    return recipeRepository.findWithIngredientsById(recipeId)
+	        .orElseThrow(() -> new EntityNotFoundException("Recipe not found with id: " + recipeId));
+	}
+
 }
