@@ -88,6 +88,9 @@ dependencies {
     implementation(libs.androidx.recyclerview)
     annotationProcessor ("com.github.bumptech.glide:compiler:4.13.2")
 
+    // WorkManager 알림
+    implementation ("androidx.work:work-runtime-ktx:2.8.1")
+
 
 
     implementation(libs.androidx.core.ktx)

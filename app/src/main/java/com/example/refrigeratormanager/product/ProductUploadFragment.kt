@@ -357,20 +357,23 @@ class ProductUploadFragment : DialogFragment() {
             override fun onResponse(call: Call<ApiResponse>, response: Response<ApiResponse>) {
                 if (response.isSuccessful) {
                     Toast.makeText(requireContext(), "재료가 업로드되었습니다!", Toast.LENGTH_SHORT).show()
-                    dismiss() // 현재 DialogFragment 종료
+                    dismiss()
 
-                    // HomeActivity로 이동
                     val intent = Intent(requireContext(), HomeActivity::class.java)
-                    intent.flags =
-                        Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK // 기존 액티비티 종료 및 새로 시작
+                    intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
                     startActivity(intent)
-                    requireActivity().finish() // 현재 액티비티 종료 (필요 시)
+                    requireActivity().finish()
                 } else {
-                    Toast.makeText(
-                        requireContext(),
-                        "재료 업로드 실패: ${response.message()}",
-                        Toast.LENGTH_SHORT
-                    ).show()
+                    Log.e("ProductUpload", "Response code: ${response.code()}, message: ${response.message()}")
+                    val errorBody = response.errorBody()?.string()
+                    Log.e("ProductUpload", "Error body: $errorBody")
+
+                    val errorMessage = "재료 업로드 실패: ${response.message()}"
+                    try {
+                        Toast.makeText(requireContext(), errorMessage, Toast.LENGTH_SHORT).show()
+                    } catch (e: Exception) {
+                        Log.e("ProductUpload", "Toast 표시 중 오류 발생", e)
+                    }
                 }
             }
 

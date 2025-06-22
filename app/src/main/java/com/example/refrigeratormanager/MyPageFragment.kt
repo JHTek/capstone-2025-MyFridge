@@ -34,8 +34,12 @@ class MyPageFragment : Fragment() {
 
         //로그아웃 시
         binding.btnLogout.setOnClickListener {
-            startActivity(Intent(requireContext(), MainActivity::class.java))
-            requireActivity().finish()
+            val sharedPreferences = requireContext().getSharedPreferences("app_preferences", 0)
+            sharedPreferences.edit().clear().apply() // 모든 로그인 정보 제거
+
+            val intent = Intent(requireContext(), MainActivity::class.java)
+            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            startActivity(intent)
         }
 
         return binding.root
