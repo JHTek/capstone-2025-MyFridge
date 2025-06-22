@@ -1,4 +1,4 @@
-package com.example.refrigeratormanager
+package com.example.refrigeratormanager.refrigerator
 
 import android.app.AlertDialog
 import android.content.Intent
@@ -12,13 +12,11 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.refrigeratormanager.CameraActivity
 import com.example.refrigeratormanager.databinding.FragmentHomeBinding
-import com.example.refrigeratormanager.refrigerator.Refrigerator
-import com.example.refrigeratormanager.refrigerator.RefrigeratorAdapter
-import com.example.refrigeratormanager.refrigerator.RefrigeratorDetailActivity
-import com.example.refrigeratormanager.refrigerator.RefrigeratorViewModel
 
-class HomeFragment : Fragment() {
+class RefrigeratorListFragment : Fragment() {
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
 
@@ -41,16 +39,23 @@ class HomeFragment : Fragment() {
         refrigeratorAdapter = RefrigeratorAdapter { refrigerator ->
             val intent = Intent(requireContext(), RefrigeratorDetailActivity::class.java)
             // 냉장고 고유 ID를 전달 (서버에서 식재료 요청 시 필요)
-            intent.putExtra("refrigerator_id", refrigerator.id)     // ✅ 이거 추가!
+            intent.putExtra("refrigerator_id", refrigerator.id)
             intent.putExtra("refrigerator_name", refrigerator.name)
             startActivity(intent)
         }
-        binding.recyclerViewRefrigerators.layoutManager = GridLayoutManager(requireContext(), 2)
+        binding.recyclerViewRefrigerators.layoutManager = LinearLayoutManager(requireContext())
         binding.recyclerViewRefrigerators.adapter = refrigeratorAdapter
 
         // ViewModel에서 LiveData를 관찰하여 데이터 변경 시 업데이트
         viewModel.refrigeratorList.observe(viewLifecycleOwner) { list ->
-            refrigeratorAdapter.submitList(list) // RecyclerView에 데이터 반영
+            if (list.isNullOrEmpty()) {
+                binding.recyclerViewRefrigerators.visibility = View.GONE
+                binding.textNoProducts.visibility = View.VISIBLE
+            } else {
+                binding.recyclerViewRefrigerators.visibility = View.VISIBLE
+                binding.textNoProducts.visibility = View.GONE
+                refrigeratorAdapter.submitList(list)
+            }
         }
 
         // 냉장고 추가 버튼 클릭 이벤트

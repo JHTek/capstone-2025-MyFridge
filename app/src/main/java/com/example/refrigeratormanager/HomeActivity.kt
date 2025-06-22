@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.example.refrigeratormanager.databinding.ActivityHomeBinding
 import com.example.refrigeratormanager.recipe.RecipeFragment
+import com.example.refrigeratormanager.refrigerator.RefrigeratorListFragment
 import com.example.refrigeratormanager.refrigerator.RefrigeratorViewModel
 
 class HomeActivity : AppCompatActivity() {
@@ -28,7 +29,7 @@ class HomeActivity : AppCompatActivity() {
         // 네비게이션 바 클릭 이벤트
         binding.bottomNavigationView.setOnItemSelectedListener { item ->
             when (item.itemId) {
-                R.id.nav_refrigerator -> replaceFragment(HomeFragment())
+                R.id.nav_refrigerator -> replaceFragment(RefrigeratorListFragment())
                 R.id.nav_mainhome -> replaceFragment(MainHomeFragment())
                 R.id.nav_recipe -> replaceFragment(RecipeFragment())
                 R.id.nav_mypage -> replaceFragment(MyPageFragment())

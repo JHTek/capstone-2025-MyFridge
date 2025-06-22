@@ -81,7 +81,7 @@
         android:id="@+id/recyclerViewRefrigerators"
         android:layout_width="412dp"
         android:layout_height="557dp"
-        android:padding="16dp"
+        android:padding="0dp"
         app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
         app:layout_constraintBottom_toTopOf="@id/bottomNavigationView"
         app:layout_constraintEnd_toEndOf="parent"
@@ -100,5 +100,20 @@
         app:backgroundTint="#B1B0B0"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
+
+    <!-- 냉장고가 없을 때 보여줄 메시지 -->
+    <TextView
+        android:id="@+id/textNoProducts"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="냉장고가 없습니다."
+        android:textSize="16sp"
+        android:textColor="@android:color/darker_gray"
+        android:gravity="center"
+        android:visibility="gone"
+        app:layout_constraintTop_toTopOf="@id/recyclerViewRefrigerators"
+        app:layout_constraintBottom_toBottomOf="@id/recyclerViewRefrigerators"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
