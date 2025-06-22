@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.mysite.ref.dto.IngredientRequestDTO;
 import com.mysite.ref.dto.IngredientResponseDTO;
+import com.mysite.ref.dto.IngredientUpdateRequestDTO;
 import com.mysite.ref.refrigerator.Refrigerator;
 import com.mysite.ref.refrigerator.RefrigeratorRepository;
 
@@ -68,5 +69,42 @@ public class IngredientsService {
 				})
 				.collect(Collectors.toList());
 	}
+	
+	@Transactional
+	public void updateIngredient(IngredientUpdateRequestDTO dto) {
+	    Ingredients ingredient = ingredientsRepository.findById(dto.getIngredientsId())
+	        .orElseThrow(() -> new IllegalArgumentException("재료를 찾을 수 없습니다: " + dto.getIngredientsId()));
+
+	    if (dto.getIngredientsName() != null) {
+	        ingredient.setIngredientsName(dto.getIngredientsName());
+	    }
+	    if (dto.getQuantity() != null) {
+	        ingredient.setQuantity(dto.getQuantity());
+	    }
+	    if (dto.getExpirationDate() != null) {
+	        ingredient.setExpirationDate(dto.getExpirationDateAsLocalDate());
+	    }
+	    if (dto.getStorageLocation() != null) {
+	        ingredient.setStorageLocation(dto.getStorageLocation());
+	    }
+	    if (dto.getClassId() != null) {
+	        ClassEntity classEntity = classRepository.findById(dto.getClassId())
+	            .orElseThrow(() -> new IllegalArgumentException("클래스를 찾을 수 없습니다: " + dto.getClassId()));
+	        ingredient.setClassEntity(classEntity);
+	    }
+	    if (dto.getRefrigeratorId() != 0) { // 0이 아닌 값만 변경
+	        Refrigerator refrigerator = refrigeratorRepository.findById(dto.getRefrigeratorId())
+	            .orElseThrow(() -> new IllegalArgumentException("냉장고를 찾을 수 없습니다: " + dto.getRefrigeratorId()));
+	        ingredient.setRefrigerator(refrigerator);
+	    }
+	}
+	
+	@Transactional
+	public void updateNote(int ingredientsId, String note) {
+	    Ingredients ingredient = ingredientsRepository.findById(ingredientsId)
+	        .orElseThrow(() -> new IllegalArgumentException("재료를 찾을 수 없습니다: " + ingredientsId));
+	    ingredient.setNote(note);
+	}
+
 
 }
