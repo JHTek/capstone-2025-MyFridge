@@ -1,4 +1,4 @@
-package com.example.refrigeratormanager
+package com.example.refrigeratormanager.refrigerator
 
 data class RefrigeratorDTO(
 

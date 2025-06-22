@@ -1,8 +1,11 @@
-package com.example.refrigeratormanager
+package com.example.refrigeratormanager.refrigerator
 
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import com.example.refrigeratormanager.CameraActivity
+import com.example.refrigeratormanager.RefrigeratorPagerAdapter
+import com.example.refrigeratormanager.SearchActivity
 import com.example.refrigeratormanager.databinding.ActivityRefrigeratorDetailBinding
 import com.google.android.material.tabs.TabLayoutMediator
 

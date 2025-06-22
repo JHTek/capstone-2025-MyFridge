@@ -13,6 +13,10 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.refrigeratormanager.databinding.FragmentHomeBinding
+import com.example.refrigeratormanager.refrigerator.Refrigerator
+import com.example.refrigeratormanager.refrigerator.RefrigeratorAdapter
+import com.example.refrigeratormanager.refrigerator.RefrigeratorDetailActivity
+import com.example.refrigeratormanager.refrigerator.RefrigeratorViewModel
 
 class HomeFragment : Fragment() {
     private var _binding: FragmentHomeBinding? = null

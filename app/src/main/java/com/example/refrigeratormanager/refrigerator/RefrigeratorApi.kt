@@ -1,4 +1,4 @@
-package com.example.refrigeratormanager
+package com.example.refrigeratormanager.refrigerator
 
 import retrofit2.Call
 import retrofit2.Response

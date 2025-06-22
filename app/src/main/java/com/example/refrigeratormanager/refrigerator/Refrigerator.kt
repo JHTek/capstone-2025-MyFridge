@@ -1,4 +1,4 @@
-package com.example.refrigeratormanager
+package com.example.refrigeratormanager.refrigerator
 
 import com.google.gson.annotations.SerializedName
 import java.io.Serializable

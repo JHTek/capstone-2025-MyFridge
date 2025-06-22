@@ -35,7 +35,7 @@
             android:name=".SearchActivity"
             android:exported="false" />
         <activity
-            android:name=".RefrigeratorDetailActivity"
+            android:name=".refrigerator.RefrigeratorDetailActivity"
             android:exported="false" />
         <activity
             android:name=".NotificationActivity"

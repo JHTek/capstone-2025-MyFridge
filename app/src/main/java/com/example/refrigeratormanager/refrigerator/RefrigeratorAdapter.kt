@@ -1,4 +1,4 @@
-package com.example.refrigeratormanager
+package com.example.refrigeratormanager.refrigerator
 
 import android.view.LayoutInflater
 import android.view.ViewGroup

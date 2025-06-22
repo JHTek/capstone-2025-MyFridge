@@ -4,6 +4,7 @@ import android.util.Log;
 
 import com.example.refrigeratormanager.ingredients.IngredientApi;
 import com.example.refrigeratormanager.recipe.RecipeApi;
+import com.example.refrigeratormanager.refrigerator.RefrigeratorApi;
 
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;

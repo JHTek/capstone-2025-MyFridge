@@ -16,8 +16,8 @@ import com.example.refrigeratormanager.ApiClient
 import com.example.refrigeratormanager.DTO.ApiResponse
 import com.example.refrigeratormanager.HomeActivity
 import com.example.refrigeratormanager.R
-import com.example.refrigeratormanager.Refrigerator
-import com.example.refrigeratormanager.RefrigeratorViewModel
+import com.example.refrigeratormanager.refrigerator.Refrigerator
+import com.example.refrigeratormanager.refrigerator.RefrigeratorViewModel
 import com.example.refrigeratormanager.ingredients.IngredientRequestDTO
 import com.example.refrigeratormanager.databinding.FragmentProductUploadBinding
 import kotlinx.coroutines.CoroutineScope
