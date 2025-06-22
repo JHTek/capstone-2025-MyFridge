@@ -1,6 +1,8 @@
 package com.mysite.ref.recipe;
 
 import java.util.List;
+import java.util.Optional;
+
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -16,5 +18,10 @@ public interface RecipeRepository extends JpaRepository<Recipe, String> {
     List<Recipe> findByClassIds(@Param("classIds") List<Integer> classIds);
     
     List<Recipe> findByRecipeNameContainingIgnoreCase(String keyword);
+    
+ // 레시피 아이디로 재료 검색
+    @Query("SELECT r FROM Recipe r LEFT JOIN FETCH r.ingreLists WHERE r.recipeId = :recipeId")
+    Optional<Recipe> findWithIngredientsById(@Param("recipeId") String recipeId);
+
 	
 }
