@@ -7,16 +7,16 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class IngredientRequestDTO {
+public class IngredientUpdateRequestDTO {
 	private int refrigeratorId;
-	private String ingredientsName;
-	private int quantity;
-	private String expirationDate;
-	private int storageLocation;
-	private int classId;
-
+    private int ingredientsId;        
+    private String ingredientsName;
+    private Integer quantity;
+    private String expirationDate;
+    private Integer storageLocation;
+    private Integer classId;        
+    
 	public LocalDate getExpirationDateAsLocalDate() {
         return LocalDate.parse(expirationDate); // "yyyy-MM-dd" 형식으로 파싱
     }
 }
-

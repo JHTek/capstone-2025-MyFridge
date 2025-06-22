@@ -31,6 +31,9 @@ public class Ingredients {
 	
 	private int storageLocation;
 	
+    @Column(length = 500) 
+    private String note;
+	
 	@ManyToOne
 	@JoinColumn(name = "class_id")
 	private ClassEntity classEntity;
