@@ -31,6 +31,24 @@
             android:textSize="16sp" />
 
         <EditText
+            android:id="@+id/editAlertInterval"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:hint="알림 주기 (시간)"
+            android:inputType="number" />
+
+        <Button
+            android:id="@+id/btnTestNotification"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAllCaps="false"
+            android:textColor="#FFFFFF"
+            android:backgroundTint="#000000"
+            android:text="테스트 알림 보내기"
+            android:layout_marginTop="16dp"/>
+
+
+        <EditText
             android:id="@+id/editAlertDays"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

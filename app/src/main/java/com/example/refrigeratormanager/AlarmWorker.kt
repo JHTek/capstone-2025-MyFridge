@@ -6,69 +6,80 @@ import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.os.Build
+import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
+import androidx.core.app.NotificationManagerCompat
 import androidx.work.Worker
 import androidx.work.WorkerParameters
 import com.example.refrigeratormanager.MainActivity
 import com.example.refrigeratormanager.product.ProductManager
-import java.text.SimpleDateFormat
+import com.example.refrigeratormanager.R
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
-import java.time.format.DateTimeParseException
-import java.util.Date
-import java.util.Locale
 
 class AlarmWorker(appContext: Context, workerParams: WorkerParameters) : Worker(appContext, workerParams) {
 
     companion object {
-        private const val CHANNEL_ID = "expiration_alert_channel"
-        private const val NOTIFICATION_ID = 1001
-        private const val PREFS_NAME = "alarm_prefs"
-        private const val KEY_ALERT_DAYS = "alert_days"
-        private const val KEY_LOG = "alert_log"
+        const val CHANNEL_ID = "expiration_alert_channel"
+        const val NOTIFICATION_ID = 1001
+        @RequiresApi(Build.VERSION_CODES.O)
+        private val dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
+
+        // 테스트 알림 함수
+        fun sendTestNotification(context: Context) {
+            val channelId = CHANNEL_ID
+            val channelName = "Expiration Alerts"
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                val channel = NotificationChannel(channelId, channelName, NotificationManager.IMPORTANCE_HIGH)
+                val manager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+                manager.createNotificationChannel(channel)
+            }
+
+            val notification = NotificationCompat.Builder(context, channelId)
+                .setSmallIcon(android.R.drawable.ic_dialog_info)
+                .setContentTitle("테스트 알림")
+                .setContentText("유통기한 임박 알림이 정상 작동합니다!")
+                .setPriority(NotificationCompat.PRIORITY_HIGH)
+                .setAutoCancel(true)
+                .build()
+
+            NotificationManagerCompat.from(context).notify(9999, notification)
+        }
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun doWork(): Result {
-        val context = applicationContext
-        val prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
-        val alertDays = prefs.getInt(KEY_ALERT_DAYS, 7)  // 기본 7일
-
-        val products = ProductManager.getAllProducts()
-
-        if (products.isEmpty()) {
-            return Result.success()
-        }
-
         createNotificationChannel()
 
-        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
-        val today = LocalDate.now()
+        val prefs = applicationContext.getSharedPreferences("alarm_prefs", Context.MODE_PRIVATE)
+        val alertDays = prefs.getInt("alert_days", 7) // 기본 7일 이내 임박 알림
 
-        val logBuilder = StringBuilder()
-        val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        val today = LocalDate.now()
+        val products = ProductManager.getAllProducts()
+
+        val notificationManager = applicationContext.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+
+        var hasNotification = false
 
         for (product in products) {
             try {
-                val expireDate = LocalDate.parse(product.expirationDate, formatter)
-                val daysLeft = today.until(expireDate).days
+                val expirationDate = LocalDate.parse(product.expirationDate, dateFormatter)
+                val daysLeft = expirationDate.toEpochDay() - today.toEpochDay()
 
-                if (daysLeft in 0..alertDays) {
-                    // 알림 메시지 수정
+                if (daysLeft in 0..alertDays.toLong()) {
+                    hasNotification = true
                     val message = "${product.ingredientsName} 유통기한이 ${daysLeft}일 남았습니다."
 
-                    //알림 클릭 시 이동
-                    val intent = Intent(context, MainActivity::class.java).apply {
+                    // 알림 클릭 시 MainActivity로 이동
+                    val intent = Intent(applicationContext, MainActivity::class.java).apply {
                         flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                     }
-                    val pendingIntent = PendingIntent.getActivity(
-                        context, 0, intent,
-                        PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
-                    )
+                    val pendingIntent = PendingIntent.getActivity(applicationContext, 0, intent, PendingIntent.FLAG_IMMUTABLE)
 
-                    val notification = NotificationCompat.Builder(context, CHANNEL_ID)
-                        .setSmallIcon(android.R.drawable.ic_dialog_alert)
+                    val notification = NotificationCompat.Builder(applicationContext, CHANNEL_ID)
+                        .setSmallIcon(R.drawable.ic_notification) // 적절한 아이콘 리소스로 교체하세요
                         .setContentTitle("유통기한 임박 알림")
                         .setContentText(message)
                         .setPriority(NotificationCompat.PRIORITY_HIGH)
@@ -76,26 +87,21 @@ class AlarmWorker(appContext: Context, workerParams: WorkerParameters) : Worker(
                         .setAutoCancel(true)
                         .build()
 
-                    notificationManager.notify(NOTIFICATION_ID + product.hashCode(), notification)
+                    notificationManager.notify(NOTIFICATION_ID + daysLeft.toInt(), notification)
 
-                    //  로그 기록 수정
-                    val dateTimeFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
-                    val nowFormatted = dateTimeFormat.format(Date())
-                    val logLine = "$nowFormatted - $message\n"
-                    logBuilder.append(logLine)
+                    // 로그 저장 (날짜 - 내용)
+                    val logEntry = "${java.time.LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"))} - $message"
+                    val existingLog = prefs.getString("alert_log", "") ?: ""
+                    val newLog = "$existingLog\n$logEntry".trim()
+                    prefs.edit().putString("alert_log", newLog).apply()
                 }
-            } catch (e: DateTimeParseException) {
-                e.printStackTrace()
+
+            } catch (e: Exception) {
+                Log.e("AlarmWorker", "유통기한 파싱 실패: ${product.expirationDate}", e)
             }
         }
 
-        // 로그 저장
-        if (logBuilder.isNotEmpty()) {
-            val existingLog = prefs.getString(KEY_LOG, "") ?: ""
-            prefs.edit().putString(KEY_LOG, existingLog + logBuilder.toString()).apply()
-        }
-
-        return Result.success()
+        return if (hasNotification) Result.success() else Result.failure()
     }
 
     private fun createNotificationChannel() {
