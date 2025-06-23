@@ -1,6 +1,7 @@
 package com.example.refrigeratormanager.recipe
 
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -13,6 +14,9 @@ import com.bumptech.glide.Glide
 import com.example.refrigeratormanager.ApiClient
 import com.example.refrigeratormanager.R
 import com.example.refrigeratormanager.databinding.FragmentRecipeBinding
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class RecipeFragment : Fragment() {
 
@@ -31,7 +35,7 @@ class RecipeFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         setupSearch()
-        loadSampleData() // TODO: 실제 서버 연동으로 대체 예정
+        loadRecommendedRecipes() // 서버 연동으로 교체됨
     }
 
     private fun setupSearch() {
@@ -59,123 +63,89 @@ class RecipeFragment : Fragment() {
         }
     }
 
-    private fun loadSampleData() {
-        val sampleData = listOf(
-            IngredientSection(
-                ingredientName = "양파",
-                recipes = listOf(
-                    Recipe(
-                        recipeName = "중화풍 마파두부 덮밥",
-                        thumbnail = "https://recipe1.ezmember.co.kr/cache/recipe/2015/05/18/48091bec0fcebd49cd4b979735068298.jpg",
-                        id = "1",
-                        cookTime = "15분",
-                        ingredients = listOf(
-                            Ingredient("두부"),
-                            Ingredient("다진 돼지고기"),
-                            Ingredient("양파"),
-                            Ingredient("고추기름")
-                        )
-                    ),
-                    Recipe(
-                        recipeName = "떡볶이",
-                        thumbnail = "https://recipe1.ezmember.co.kr/cache/recipe/2018/01/15/593e123714a3af6752388583567427cb1_m.jpg",
-                        id = "2",
-                        cookTime = "20분",
-                        ingredients = listOf(
-                            Ingredient("떡"),
-                            Ingredient("고추장"),
-                            Ingredient("양파"),
-                            Ingredient("어묵")
-                        )
-                    )
-                )
-            ),
-            IngredientSection(
-                ingredientName = "시금치",
-                recipes = listOf(
-                    Recipe(
-                        recipeName = "두부시금치무침",
-                        thumbnail = "https://recipe1.ezmember.co.kr/cache/recipe/2016/12/08/34ba5bf522b2964e97b70dcd5b62dcb31_m.jpg",
-                        id = "3",
-                        cookTime = "10분",
-                        ingredients = listOf(
-                            Ingredient("두부"),
-                            Ingredient("시금치"),
-                            Ingredient("참기름"),
-                            Ingredient("소금")
-                        )
-                    ),
-                    Recipe(
-                        recipeName = "건새우 시금치 된장국",
-                        thumbnail = "https://recipe1.ezmember.co.kr/cache/recipe/2015/10/20/895c415659fff90e1f493ab1d86357731_m.jpg",
-                        id = "4",
-                        cookTime = "15분",
-                        ingredients = listOf(
-                            Ingredient("건새우"),
-                            Ingredient("시금치"),
-                            Ingredient("된장"),
-                            Ingredient("다시마")
-                        )
-                    )
-                )
-            )
-        )
+    private fun loadRecommendedRecipes() {
+        val sharedPref = requireContext().getSharedPreferences("app_preferences", Context.MODE_PRIVATE)
+        val token = sharedPref.getString("JWT_TOKEN", null)
 
-        bindSection(sampleData[0], isOnion = true)
-        bindSection(sampleData[1], isOnion = false)
+
+        if (token.isNullOrEmpty()) {
+            Toast.makeText(requireContext(), "로그인이 필요합니다", Toast.LENGTH_SHORT).show()
+            return
+        }
+
+        recipeApi.getRecommendedRecipes("Bearer $token").enqueue(object : Callback<List<IngredientSection>> {
+            override fun onResponse(
+                call: Call<List<IngredientSection>>,
+                response: Response<List<IngredientSection>>
+            ) {
+                if (response.isSuccessful) {
+                    val sections = response.body() ?: emptyList()
+                    bindSectionsDynamically(sections)
+                } else {
+                    Toast.makeText(requireContext(), "레시피 불러오기 실패", Toast.LENGTH_SHORT).show()
+                }
+            }
+
+            override fun onFailure(call: Call<List<IngredientSection>>, t: Throwable) {
+                Toast.makeText(requireContext(), "서버 연결 실패", Toast.LENGTH_SHORT).show()
+            }
+        })
     }
 
-    private fun bindSection(section: IngredientSection, isOnion: Boolean) {
-        if (isOnion) {
-            binding.textOnionTitle.text = "${section.ingredientName}를 사용하는 추천 요리"
-            binding.textOnionRecipe1.text = section.recipes[0].recipeName
-            binding.textOnionRecipe2.text = section.recipes[1].recipeName
+    private fun bindSectionsDynamically(sections: List<IngredientSection>) {
+        val layouts = listOf(
+            binding.section1 to Pair(binding.textSection1Title, listOf(
+                Triple(binding.imageSection1Recipe1, binding.textSection1Recipe1, binding.layoutSection1Recipe1),
+                Triple(binding.imageSection1Recipe2, binding.textSection1Recipe2, binding.layoutSection1Recipe2)
+            )),
+            binding.section2 to Pair(binding.textSection2Title, listOf(
+                Triple(binding.imageSection2Recipe1, binding.textSection2Recipe1, binding.layoutSection2Recipe1),
+                Triple(binding.imageSection2Recipe2, binding.textSection2Recipe2, binding.layoutSection2Recipe2)
+            )),
+            binding.section3 to Pair(binding.textSection3Title, listOf(
+                Triple(binding.imageSection3Recipe1, binding.textSection3Recipe1, binding.layoutSection3Recipe1),
+                Triple(binding.imageSection3Recipe2, binding.textSection3Recipe2, binding.layoutSection3Recipe2)
+            )),
+            binding.section4 to Pair(binding.textSection4Title, listOf(
+                Triple(binding.imageSection4Recipe1, binding.textSection4Recipe1, binding.layoutSection4Recipe1),
+                Triple(binding.imageSection4Recipe2, binding.textSection4Recipe2, binding.layoutSection4Recipe2)
+            )),
+            binding.section5 to Pair(binding.textSection5Title, listOf(
+                Triple(binding.imageSection5Recipe1, binding.textSection5Recipe1, binding.layoutSection5Recipe1),
+                Triple(binding.imageSection5Recipe2, binding.textSection5Recipe2, binding.layoutSection5Recipe2)
+            ))
+        )
 
-            Glide.with(this)
-                .load(section.recipes[0].thumbnail)
-                .into(binding.imageOnionRecipe1)
+        for (i in sections.indices) {
+            val section = sections[i]
 
-            Glide.with(this)
-                .load(section.recipes[1].thumbnail)
-                .into(binding.imageOnionRecipe2)
-
-            binding.textOnionMore.setOnClickListener {
-                Toast.makeText(requireContext(), "${section.ingredientName} 더보기", Toast.LENGTH_SHORT).show()
+            // ⭐ 방어 코드: null 체크와 최소 2개 레시피 조건 확인
+            if (section.recipes == null || section.recipes.size < 2) {
+                continue
             }
 
-            binding.imageOnionRecipe1.setOnClickListener {
-                Toast.makeText(requireContext(), "${section.recipes[0].recipeName} 클릭됨", Toast.LENGTH_SHORT).show()
-            }
+            val (sectionLayout, pair) = layouts[i]
+            val (titleView, recipeViews) = pair
 
-            binding.imageOnionRecipe2.setOnClickListener {
-                Toast.makeText(requireContext(), "${section.recipes[1].recipeName} 클릭됨", Toast.LENGTH_SHORT).show()
-            }
-        } else {
-            binding.textSpinachTitle.text = "${section.ingredientName}를 사용하는 추천 요리"
-            binding.textSpinachRecipe1.text = section.recipes[0].recipeName
-            binding.textSpinachRecipe2.text = section.recipes[1].recipeName
+            sectionLayout.visibility = View.VISIBLE
+            titleView.text = "${section.ingredientName}를 사용하는 추천 요리"
 
-            Glide.with(this)
-                .load(section.recipes[0].thumbnail)
-                .into(binding.imageSpinachRecipe1)
+            for (j in 0..1) {
+                val recipe = section.recipes[j]
+                val (imageView, textView, layoutView) = recipeViews[j]
 
-            Glide.with(this)
-                .load(section.recipes[1].thumbnail)
-                .into(binding.imageSpinachRecipe2)
+                textView.text = recipe.recipeName
+                Glide.with(this).load(recipe.thumbnail).into(imageView)
 
-            binding.textSpinachMore.setOnClickListener {
-                Toast.makeText(requireContext(), "${section.ingredientName} 더보기", Toast.LENGTH_SHORT).show()
-            }
-
-            binding.imageSpinachRecipe1.setOnClickListener {
-                Toast.makeText(requireContext(), "${section.recipes[0].recipeName} 클릭됨", Toast.LENGTH_SHORT).show()
-            }
-
-            binding.imageSpinachRecipe2.setOnClickListener {
-                Toast.makeText(requireContext(), "${section.recipes[1].recipeName} 클릭됨", Toast.LENGTH_SHORT).show()
+                layoutView.setOnClickListener {
+                    val intent = Intent(requireContext(), RecipeDetailActivity::class.java)
+                    intent.putExtra("recipe", recipe)
+                    startActivity(intent)
+                }
             }
         }
     }
+
 
     private fun searchRecipesFromServer(keyword: String) {
         moveToSearchResultFragment(keyword)
