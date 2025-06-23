@@ -41,13 +41,18 @@ class SearchResultFragment : Fragment() {
 
         // ✅ RecyclerView 설정 (유지)
         adapter = SearchResultAdapter(recipeList) { recipe ->
-            if (recipe.url.isNullOrBlank()) {
-                Toast.makeText(requireContext(), "레시피 링크가 없습니다", Toast.LENGTH_SHORT).show()
-            } else {
-                val intent = Intent(Intent.ACTION_VIEW, Uri.parse(recipe.url))
-                startActivity(intent)
+            // 재료를 문자열로 가공
+            val ingredientsText = recipe.ingredients.joinToString("\n") {
+                "${it.name} ${it.count}${it.unit}"
             }
+
+            val intent = Intent(requireContext(), RecipeDetailActivity::class.java).apply {
+                putExtra("recipe", recipe)  // recipe는 Parcelable이므로 직접 전달 가능
+            }
+            startActivity(intent)
+
         }
+
         binding.recyclerViewSearchResults.layoutManager = GridLayoutManager(requireContext(), 2)
         binding.recyclerViewSearchResults.adapter = adapter
 

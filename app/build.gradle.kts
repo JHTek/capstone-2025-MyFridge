@@ -4,6 +4,7 @@ import java.io.FileInputStream
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
+    id("kotlin-parcelize")
 }
 
 val localProperties = Properties()
@@ -87,6 +88,11 @@ dependencies {
     implementation ("com.github.bumptech.glide:glide:4.13.2")
     implementation(libs.androidx.recyclerview)
     annotationProcessor ("com.github.bumptech.glide:compiler:4.13.2")
+
+    // WorkManager 알림
+    implementation ("androidx.work:work-runtime-ktx:2.8.1")
+
+
 
 
 

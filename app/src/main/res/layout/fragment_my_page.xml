@@ -5,7 +5,8 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="@color/white"
-    android:padding="20dp">
+    android:padding="20dp"
+    >
 
     <!-- 프로필 영역 -->
     <LinearLayout
@@ -13,7 +14,8 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:gravity="center_horizontal"
-        android:paddingBottom="24dp">
+        android:paddingBottom="24dp"
+        android:fitsSystemWindows="true">
 
         <ImageView
             android:layout_width="80dp"

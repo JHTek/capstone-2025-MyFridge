@@ -8,8 +8,6 @@ object ProductManager {
         productMap[refrigeratorId] = products
     }
 
-
-
     // 제품 삭제
     fun removeProduct(refrigeratorId: Int, product: Product) {
         val originalList = productMap[refrigeratorId] ?: return
@@ -39,5 +37,9 @@ object ProductManager {
         )
     }
 
+    // 🔥 추가된 부분
+    fun getAllProducts(): List<Product> {
+        return productMap.values.flatten()
+    }
 }
 

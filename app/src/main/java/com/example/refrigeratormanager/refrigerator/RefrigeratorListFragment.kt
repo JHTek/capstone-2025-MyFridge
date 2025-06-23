@@ -14,6 +14,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.refrigeratormanager.CameraActivity
+import com.example.refrigeratormanager.NotificationActivity
 import com.example.refrigeratormanager.databinding.FragmentHomeBinding
 
 class RefrigeratorListFragment : Fragment() {
@@ -66,6 +67,11 @@ class RefrigeratorListFragment : Fragment() {
             } else {
                 Toast.makeText(requireContext(), "로그인 정보가 없습니다. 다시 로그인해주세요.", Toast.LENGTH_SHORT).show()
             }
+        }
+
+        binding.btnNotification.setOnClickListener {
+            val intent = Intent(requireContext(), NotificationActivity::class.java)
+            startActivity(intent)
         }
 
         // 카메라 이동 버튼 클릭

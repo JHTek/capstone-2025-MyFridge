@@ -20,6 +20,18 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        val sharedPreferences = getSharedPreferences("app_preferences", MODE_PRIVATE)
+        val token = sharedPreferences.getString("JWT_TOKEN", null)
+
+        if (!token.isNullOrEmpty()) {
+            // 이미 로그인 되어있음 → 홈으로 바로 이동
+            startActivity(Intent(this, HomeActivity::class.java))
+            finish()
+            return
+        }
+
+        // 로그인 화면 표시
         setContentView(R.layout.activity_main)
 
         etID = findViewById(R.id.etID)
