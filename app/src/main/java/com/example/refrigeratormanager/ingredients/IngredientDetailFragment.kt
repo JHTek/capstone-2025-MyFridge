@@ -57,8 +57,18 @@ class IngredientDetailFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        Log.d("IngredientDetail", "onViewCreated 호출됨")
-        Log.d("IngredientDetail", "불러온 Product 정보: $product")
+        val token = getToken() ?: return
+        ProductRepository.getProductByIdViaRefrigerator(
+            token = token,
+            refrigeratorId = product.refrigeratorId,
+            productId = product.ingredientsId,
+            onSuccess = { updatedProduct ->
+                updateUIWithProduct(updatedProduct)
+            },
+            onFailure = {
+                Toast.makeText(requireContext(), "최신 정보 불러오기 실패", Toast.LENGTH_SHORT).show()
+            }
+        )
 
         // 기본 정보 표시
         binding.imageCategory.setImageResource(ImageUtils.getImageResourceForCategory(product.category))
@@ -76,7 +86,6 @@ class IngredientDetailFragment : Fragment() {
                 updateUIWithProduct(it)
             }
         }
-
 
         // 메모 저장 버튼
         binding.btnSaveMemo.setOnClickListener {
@@ -97,7 +106,6 @@ class IngredientDetailFragment : Fragment() {
             )
         }
 
-
         // 수정 버튼
         binding.btnEdit.setOnClickListener {
             val container = requireActivity().findViewById<FrameLayout>(R.id.childFragmentContainer)
@@ -112,8 +120,6 @@ class IngredientDetailFragment : Fragment() {
                 ?.commit()
         }
 
-
-
         // 삭제 버튼
         binding.btnDelete.setOnClickListener {
             val token = getToken() ?: return@setOnClickListener
@@ -121,6 +127,12 @@ class IngredientDetailFragment : Fragment() {
                 token = token,
                 productId = product.ingredientsId,
                 onSuccess = {
+                    // ✅ 부모의 부모에 이벤트 전달
+                    parentFragment?.parentFragmentManager?.setFragmentResult("delete_result", Bundle().apply {
+                        putBoolean("deleted", true)
+                        putInt("deleted_id", product.ingredientsId)
+                    })
+
                     Toast.makeText(requireContext(), "삭제 완료", Toast.LENGTH_SHORT).show()
                     parentFragmentManager.popBackStack()
                 },
@@ -129,6 +141,8 @@ class IngredientDetailFragment : Fragment() {
                 }
             )
         }
+
+
     }
 
     private fun getToken(): String? {
@@ -144,6 +158,7 @@ class IngredientDetailFragment : Fragment() {
         binding.tvQuantity.text = "수량: ${product.quantity}"
         binding.tvExpirationDate.text = "유통기한: ${product.expirationDate}"
         binding.tvCategory.text = "카테고리: ${product.category}"
+        binding.etMemo.setText(product.note ?: "")
     }
 
 }

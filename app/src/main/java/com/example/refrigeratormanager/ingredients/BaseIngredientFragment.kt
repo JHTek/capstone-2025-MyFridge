@@ -110,20 +110,21 @@ abstract class BaseIngredientFragment<VB : ViewBinding> : Fragment() {
         }
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        // ✅ 삭제 결과 수신 처리
+        parentFragmentManager.setFragmentResultListener("delete_result", viewLifecycleOwner) { _, bundle ->
+            val wasDeleted = bundle.getBoolean("deleted")
+            if (wasDeleted) {
+                loadAndDisplayProducts()  // 🔁 삭제 후 목록 새로고침
+            }
+        }
+    }
+
 
     override fun onDestroyView() {
         super.onDestroyView()
-//
-//        // childFragmentContainer 숨김
-//        val container = requireActivity().findViewById<FrameLayout>(R.id.childFragmentContainer)
-//        container.visibility = View.GONE
-//
-//        // 재료 리스트 다시 보이게
-//        val recyclerView = requireActivity().findViewById<RecyclerView>(R.id.productRecyclerView)
-//        recyclerView.visibility = View.VISIBLE
-//
-//        val noProductsText = requireActivity().findViewById<TextView>(R.id.textNoProducts)
-//        noProductsText.visibility = if (recyclerView.adapter?.itemCount == 0) View.VISIBLE else View.GONE
     }
 
     override fun onResume() {
