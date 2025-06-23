@@ -28,7 +28,7 @@ class SearchResultAdapter(
     override fun onBindViewHolder(holder: RecipeViewHolder, position: Int) {
         val recipe = recipeList[position]
 
-        holder.textRecipe.text = recipe.recipe_name
+        holder.textRecipe.text = recipe.recipeName
 
         Glide.with(holder.itemView.context)
             .load(recipe.thumbnail)
