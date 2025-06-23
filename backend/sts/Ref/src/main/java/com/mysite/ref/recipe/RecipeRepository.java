@@ -1,5 +1,7 @@
 package com.mysite.ref.recipe;
 
+import org.springframework.data.domain.Pageable;
+
 import java.util.List;
 import java.util.Optional;
 
@@ -22,6 +24,9 @@ public interface RecipeRepository extends JpaRepository<Recipe, String> {
  // 레시피 아이디로 재료 검색
     @Query("SELECT r FROM Recipe r LEFT JOIN FETCH r.ingreLists WHERE r.recipeId = :recipeId")
     Optional<Recipe> findWithIngredientsById(@Param("recipeId") String recipeId);
+    
+    @Query("SELECT DISTINCT r FROM Recipe r JOIN r.ingreLists il WHERE il.ingreName = :ingredientName")
+    List<Recipe> findByIngredientName(@Param("ingredientName") String ingredientName, Pageable pageable);
 
 	
 }

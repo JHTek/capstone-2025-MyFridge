@@ -1,5 +1,6 @@
 package com.mysite.ref.dto;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.mysite.ref.recipe.RecipeOrder;
 import lombok.Getter;
 import lombok.Setter;
@@ -13,6 +14,16 @@ public class RecipeOrderDto {
     private String description;     // 새 필드
     private String photoUrl;        // 새 필드
 
+ // ✅ 기본 생성자 명시적으로 추가
+    public RecipeOrderDto() {}
+
+ // ✅ 문자열 기반 생성자 추가
+    @JsonCreator
+    public RecipeOrderDto(String instruction) {
+        this.instruction = instruction;
+        this.stepNumber = parseStepNumber();
+        this.description = parseDescription();
+    }
     // ✅ RecipeOrder → DTO 변환 (Spring에서 사용)
     public static RecipeOrderDto from(RecipeOrder order) {
         RecipeOrderDto dto = new RecipeOrderDto();
