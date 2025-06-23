@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -55,6 +56,12 @@ public class IngredientsController {
 	) {
 	    ingredientsService.updateNote(ingredientsId, request.getNote());
 	    return ResponseEntity.ok(new ApiResponse("비고가 성공적으로 수정되었습니다."));
+	}
+	
+	@DeleteMapping("/delete/{ingredientsId}")
+	public ResponseEntity<ApiResponse> deleteIngredient(@PathVariable("ingredientsId") int ingredientsId) {
+	    ingredientsService.deleteIngredient(ingredientsId);
+	    return ResponseEntity.ok(new ApiResponse("재료가 성공적으로 삭제되었습니다."));
 	}
 
 

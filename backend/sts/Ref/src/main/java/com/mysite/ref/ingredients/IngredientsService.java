@@ -59,6 +59,7 @@ public class IngredientsService {
 					dto.setExpirationDate(ingredient.getExpirationDate());
 					dto.setStorageLocation(ingredient.getStorageLocation());
 					dto.setRefrigeratorName(ingredient.getRefrigerator().getRefrigeratorName()); // Refrigerator 엔티티의 이름을 가져옴
+					dto.setNote(ingredient.getNote());
 					if (ingredient.getClassEntity() != null) {
 		                dto.setCategory(ingredient.getClassEntity().getCategory());
 		            } else {
@@ -105,6 +106,14 @@ public class IngredientsService {
 	        .orElseThrow(() -> new IllegalArgumentException("재료를 찾을 수 없습니다: " + ingredientsId));
 	    ingredient.setNote(note);
 	}
+	
+	@Transactional
+	public void deleteIngredient(int ingredientsId) {
+	    Ingredients ingredient = ingredientsRepository.findById(ingredientsId)
+	        .orElseThrow(() -> new IllegalArgumentException("재료를 찾을 수 없습니다: " + ingredientsId));
+	    ingredientsRepository.delete(ingredient);
+	}
+
 
 
 }
