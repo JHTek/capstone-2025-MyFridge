@@ -12,7 +12,8 @@ import com.example.refrigeratormanager.R
 import com.example.refrigeratormanager.ingredients.ImageUtils
 
 class ProductAdapter(
-    private val productList: List<Product>
+    private val productList: List<Product>,
+    private val onClick: (Product) -> Unit
 ) : RecyclerView.Adapter<ProductAdapter.ProductViewHolder>() {
 
     inner class ProductViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -41,7 +42,9 @@ class ProductAdapter(
             2 -> holder.itemView.gravityRight()
         }
 
-        // 필요하다면 마진도 세부 조정 가능
+        holder.itemView.setOnClickListener {
+            onClick(product)  // ← 클릭 시 전달된 product를 호출자에게 전달
+        }
     }
 
 

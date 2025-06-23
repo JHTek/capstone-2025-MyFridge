@@ -19,4 +19,13 @@
         android:gravity="center"
         android:layout_gravity="center"
         android:visibility="gone" />
+
+    <!-- 상세화면용 Fragment 컨테이너 -->
+    <FrameLayout
+        android:id="@+id/childFragmentContainer"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@android:color/white"
+        android:visibility="gone"/>
+
 </FrameLayout>

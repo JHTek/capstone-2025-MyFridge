@@ -2,6 +2,7 @@ package com.example.refrigeratormanager.refrigerator
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import com.example.refrigeratormanager.CameraActivity
 import com.example.refrigeratormanager.RefrigeratorPagerAdapter
@@ -14,12 +15,14 @@ class RefrigeratorDetailActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        Log.d("RefrigeratorDetail", "▶ onCreate 시작")
         binding = ActivityRefrigeratorDetailBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         // 인텐트에서 냉장고 이름, 아이디 가져오기 (기본값: "냉장고", -1)
         val refrigeratorId = intent.getIntExtra("refrigerator_id", -1)
         val refrigeratorName = intent.getStringExtra("refrigerator_name") ?: "냉장고"
+        Log.d("RefrigeratorDetail", "▶ 받은 refrigeratorId = $refrigeratorId, refrigeratorName = $refrigeratorName")
         binding.tvRefrigeratorName.text = refrigeratorName
 
         // 뷰페이저 어댑터 설정
@@ -35,6 +38,7 @@ class RefrigeratorDetailActivity : AppCompatActivity() {
                 else -> "기타"
             }
         }.attach()
+        Log.d("RefrigeratorDetail", "✅ TabLayout 연결 완료")
 
         // 뒤로 가기 버튼 클릭 시 액티비티 종료
         binding.btnBack.setOnClickListener {

@@ -1,5 +1,6 @@
 package com.example.refrigeratormanager
 
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.widget.Button
@@ -10,14 +11,21 @@ import androidx.recyclerview.widget.RecyclerView
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.util.UUID
 
 class ChatActivity : AppCompatActivity() {
     private lateinit var chatAdapter: ChatAdapter
     private val chatMessages = mutableListOf<ChatMessage>()
+    private lateinit var userId: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_chat)
+
+        val prefs = getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
+        userId = prefs.getString("user_id", null) ?: UUID.randomUUID().toString().also {
+            prefs.edit().putString("user_id", it).apply()
+        }
 
         val recyclerView = findViewById<RecyclerView>(R.id.recyclerView)
         val editText = findViewById<EditText>(R.id.messageInput)
@@ -46,7 +54,7 @@ class ChatActivity : AppCompatActivity() {
 
     private fun sendMessageToServer(message: String) {
         val apiService = ApiClient.getClient().create(UsersApi::class.java)
-        val request = ChatRequest(message)
+        val request = ChatRequest(message = message, userId = userId)
 
         apiService.sendMessage(request).enqueue(object : Callback<ChatResponse> {
             override fun onResponse(call: Call<ChatResponse>, response: Response<ChatResponse>) {
