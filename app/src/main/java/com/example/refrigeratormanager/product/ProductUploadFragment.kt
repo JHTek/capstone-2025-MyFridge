@@ -345,6 +345,7 @@ class ProductUploadFragment : DialogFragment() {
         val sharedPreferences = requireContext().getSharedPreferences("app_preferences", Context.MODE_PRIVATE)
         return sharedPreferences.getString("JWT_TOKEN", null)
     }
+
     private fun sendIngredientsToServer(ingredientRequests: List<IngredientRequestDTO>) {
         val token = getToken() ?: run {
             Toast.makeText(requireContext(), "로그인이 필요합니다.", Toast.LENGTH_SHORT).show()
