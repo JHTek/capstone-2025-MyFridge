@@ -1,5 +1,6 @@
 package com.mysite.ref.ingredients;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -24,25 +25,34 @@ public class IngredientsService {
 	
 	@Transactional
 	 public void addIngredients(List<IngredientRequestDTO> ingredientsDtoList) {
-        ClassEntity defaultClass = classRepository.findById(2)//test용
-        		.orElseThrow(() -> new IllegalArgumentException("Default class not found"));
+
         
 		for (IngredientRequestDTO dto : ingredientsDtoList) {
             Refrigerator refrigerator = refrigeratorRepository.findById(dto.getRefrigeratorId())
                     .orElseThrow(() -> new IllegalArgumentException("Invalid refrigerator ID"));
-
-            //Class type = classRepository.findById(dto.getClassId())
-              //      .orElseThrow(() -> new IllegalArgumentException("Invalid class ID"));
+            
+            String normalizedName = dto.getIngredientsName().trim().toLowerCase();
+            ClassEntity classEntity = classRepository.findByClassNameIgnoreCase(normalizedName)
+                .orElseGet(() -> {
+                    return classRepository.findById(1)
+                        .orElseThrow(() -> new IllegalArgumentException("Default class not found"));
+                });
+            
+            LocalDate expirationDate;
+            if (dto.getExpirationDate() == null || dto.getExpirationDate().isEmpty()) {
+                expirationDate = LocalDate.now().plusDays(classEntity.getShelfLife());
+            } else {
+                expirationDate = dto.getExpirationDateAsLocalDate();
+            }
 
             Ingredients ingredient = new Ingredients();
             ingredient.setIngredientsName(dto.getIngredientsName());
             ingredient.setQuantity(dto.getQuantity());
             ingredient.setExpirationDate(dto.getExpirationDateAsLocalDate());
+            ingredient.setExpirationDate(expirationDate);
             ingredient.setStorageLocation(dto.getStorageLocation());
             ingredient.setRefrigerator(refrigerator);
-            //ingredient.setType(type);
-            
-            ingredient.setClassEntity(defaultClass); // test용
+            ingredient.setClassEntity(classEntity); // 매핑된 클래스 설정
             ingredientsRepository.save(ingredient);
         }
     }
@@ -113,6 +123,8 @@ public class IngredientsService {
 	        .orElseThrow(() -> new IllegalArgumentException("재료를 찾을 수 없습니다: " + ingredientsId));
 	    ingredientsRepository.delete(ingredient);
 	}
+	
+	
 
 
 

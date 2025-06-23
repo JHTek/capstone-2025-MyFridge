@@ -13,10 +13,12 @@ public class IngredientRequestDTO {
 	private int quantity;
 	private String expirationDate;
 	private int storageLocation;
-	private int classId;
 
-	public LocalDate getExpirationDateAsLocalDate() {
-        return LocalDate.parse(expirationDate); // "yyyy-MM-dd" 형식으로 파싱
+    public LocalDate getExpirationDateAsLocalDate() {
+        if (expirationDate == null || expirationDate.isEmpty()) {
+            return null; // null 반환 허용
+        }
+        return LocalDate.parse(expirationDate);
     }
 }
 
