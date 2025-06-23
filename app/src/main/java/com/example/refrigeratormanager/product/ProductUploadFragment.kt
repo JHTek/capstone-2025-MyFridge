@@ -57,10 +57,6 @@ class ProductUploadFragment : DialogFragment() {
         val productMap = arguments?.getSerializable("productData") as? Map<String, Int> ?: emptyMap()
         val productName = arguments?.getString("productName") ?: "" //상품명 받아오기
         val quantity = arguments?.getString("quantity") ?: "1" // 기본 수량 설정
-        Log.d("ProductUploadFragment", "받은 이름: $productName, 수량: $quantity")
-
-
-
 
         binding.expirationDateEditText.setText("") // 유통기한 비워둠
         binding.storageTypeSpinner.setSelection(0) // 기본값으로 "냉장" 설정
@@ -226,10 +222,13 @@ class ProductUploadFragment : DialogFragment() {
         val baseStorageLocation = binding.storageTypeSpinner.selectedItemPosition
 
         // 기본 필드 유효성 검사
-        if (baseProductName.isEmpty() || baseQuantity == null || baseExpirationDate.isEmpty()) {
-            Toast.makeText(requireContext(), "기본 필드의 모든 정보를 입력하세요.", Toast.LENGTH_SHORT).show()
+        if (baseProductName.isEmpty() || baseQuantity == null) {
+            Toast.makeText(requireContext(), "제품명과 수량은 필수 입력 항목입니다.", Toast.LENGTH_SHORT).show()
             return
         }
+
+        // 유통기한이 비어있다면 null로 설정
+        val parsedBaseExpirationDate = if (baseExpirationDate.isEmpty()) null else baseExpirationDate
 
         // 기본 필드 데이터를 리스트에 추가
         ingredientRequests.add(
@@ -237,7 +236,7 @@ class ProductUploadFragment : DialogFragment() {
                 refrigeratorId = selectedRefrigeratorId,
                 ingredientsName = baseProductName,
                 quantity = baseQuantity,
-                expirationDate = baseExpirationDate,
+                expirationDate = parsedBaseExpirationDate,
                 storageLocation = baseStorageLocation
 
             )
@@ -251,20 +250,20 @@ class ProductUploadFragment : DialogFragment() {
             val expirationDateInput = productField.findViewById<EditText>(R.id.expirationDateEditText)
             val storageLocationSpinner = productField.findViewById<Spinner>(R.id.storageTypeSpinner)
 
-
-
-
             val ingredientsName = productNameInput.text.toString().trim()
             val quantity = quantityInput.text.toString().trim().toIntOrNull()
             val expirationDate = expirationDateInput.text.toString().trim()
             val storageLocation = storageLocationSpinner.selectedItemPosition
             val selectedRefrigeratorId = refrigeratorIdMap[productField]
 
-            // 유효성 검사
-            if (ingredientsName.isEmpty() || quantity == null || expirationDate.isEmpty() || selectedRefrigeratorId == null) {
-                Toast.makeText(requireContext(), "모든 정보를 입력하세요.", Toast.LENGTH_SHORT).show()
+            // 유효성 검사 (expirationDate 제외)
+            if (ingredientsName.isEmpty() || quantity == null || selectedRefrigeratorId == null) {
+                Toast.makeText(requireContext(), "제품명과 수량은 필수 입력 항목입니다.", Toast.LENGTH_SHORT).show()
                 return
             }
+
+            // expirationDate가 비어있으면 null 처리
+            val parsedExpirationDate = if (expirationDate.isEmpty()) null else expirationDate
 
             // 동적 필드 데이터를 리스트에 추가
             ingredientRequests.add(
@@ -272,7 +271,7 @@ class ProductUploadFragment : DialogFragment() {
                     refrigeratorId = selectedRefrigeratorId,
                     ingredientsName = ingredientsName,
                     quantity = quantity,
-                    expirationDate = expirationDate ,
+                    expirationDate = parsedExpirationDate ,
                     storageLocation = storageLocation
                 )
             )

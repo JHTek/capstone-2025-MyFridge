@@ -105,5 +105,47 @@ object ProductRepository {
         })
     }
 
+    fun getProductByIdViaRefrigerator(
+        token: String,
+        refrigeratorId: Int,
+        productId: Int,
+        onSuccess: (Product) -> Unit,
+        onFailure: (Throwable) -> Unit
+    ) {
+        val api = ApiClient.getIngredientApi()
+        api.getIngredientsByRefrigeratorId("Bearer $token", refrigeratorId)
+            .enqueue(object : Callback<List<IngredientResponseDTO>> {
+                override fun onResponse(
+                    call: Call<List<IngredientResponseDTO>>,
+                    response: Response<List<IngredientResponseDTO>>
+                ) {
+                    if (response.isSuccessful) {
+                        val dtoList = response.body() ?: emptyList()
+                        val targetDto = dtoList.find { it.ingredientsId == productId }
 
+                        if (targetDto != null) {
+                            val product = Product(
+                                ingredientsId = targetDto.ingredientsId,
+                                refrigeratorId = targetDto.refrigeratorId,
+                                ingredientsName = targetDto.ingredientsName,
+                                quantity = targetDto.quantity,
+                                expirationDate = targetDto.expirationDate,
+                                storageLocation = targetDto.storageLocation,
+                                category = targetDto.category,
+                                note = targetDto.note
+                            )
+                            onSuccess(product)
+                        } else {
+                            onFailure(Throwable("해당 productId를 가진 식재료를 찾을 수 없습니다."))
+                        }
+                    } else {
+                        onFailure(Throwable("서버 오류: ${response.code()}"))
+                    }
+                }
+
+                override fun onFailure(call: Call<List<IngredientResponseDTO>>, t: Throwable) {
+                    onFailure(t)
+                }
+            })
+    }
 }

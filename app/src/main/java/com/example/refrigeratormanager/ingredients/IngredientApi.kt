@@ -31,10 +31,10 @@ interface IngredientApi {
         @Body noteUpdateRequestDTO: NoteUpdateRequestDTO
     ): Call<ApiResponse>
 
-    @DELETE("ingredients/{ingredientsId}")
+    @DELETE("ingredients/delete/{id}")
     fun deleteProduct(
         @Header("Authorization") token: String,
-        @Path("ingredientsId") ingredientsId: Int
+        @Path("id") productId: Int
     ): Call<ApiResponse>
 
     @PUT("ingredients/update")
