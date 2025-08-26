@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.example.refrigeratormanager.databinding.FragmentMyPageBinding
+import com.example.refrigeratormanager.SettingsActivity
 
 class MyPageFragment : Fragment() {
     private var _binding: FragmentMyPageBinding? = null
