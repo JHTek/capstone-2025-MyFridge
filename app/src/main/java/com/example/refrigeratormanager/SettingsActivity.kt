@@ -96,11 +96,12 @@ class SettingsActivity : AppCompatActivity() {
         }
     }
 
+
     private fun sendTestNotification() {
         val channelId = "expiration_alert_channel"
         val channelName = "Expiration Alerts"
 
-        val context = this
+        val context =  this
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val channel = android.app.NotificationChannel(
