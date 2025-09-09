@@ -15,7 +15,7 @@
         android:id="@+id/collapsingToolbar"
         android:layout_width="match_parent"
         android:layout_height="300dp"
-        app:contentScrim="@android:color/white"
+        app:contentScrim="#DADADA"
         app:expandedTitleMarginStart="48dp"
         app:expandedTitleMarginEnd="64dp"
         app:layout_scrollFlags="scroll|exitUntilCollapsed"
@@ -95,4 +95,18 @@
 
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fabChat"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:contentDescription="레시피와 대화 시작"
+        android:src="@drawable/character"
+    android:tint="@android:color/white"
+    app:backgroundTint="@color/teal_700"
+    android:layout_gravity="bottom|end"
+    android:layout_margin="16dp"
+    app:useCompatPadding="true"
+    />
+
+
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -1,4 +1,4 @@
-package com.example.refrigeratormanager
+package com.example.refrigeratormanager.chat
 
 data class ChatMessage(
     val message: String,

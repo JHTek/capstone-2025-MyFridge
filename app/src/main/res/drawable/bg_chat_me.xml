@@ -1,5 +1,18 @@
-<?xml version="1.0" encoding="utf-8"?>
-<shape xmlns:android="http://schemas.android.com/apk/res/android">
-    <solid android:color="#4CAF50"/>
-    <corners android:radius="16dp"/>
-</shape>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- 꼬리 -->
+    <item android:gravity="right|bottom">
+        <shape android:shape="rectangle">
+            <solid android:color="#2196F3"/>
+            <size android:width="12dp" android:height="12dp"/>
+            <corners android:radius="2dp"/>
+        </shape>
+    </item>
+
+    <!-- 말풍선 본체 -->
+    <item>
+        <shape android:shape="rectangle">
+            <solid android:color="#2196F3"/>
+            <corners android:radius="16dp"/>
+        </shape>
+    </item>
+</layer-list>

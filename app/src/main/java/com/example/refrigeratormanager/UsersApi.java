@@ -1,5 +1,8 @@
 package com.example.refrigeratormanager;
 
+import com.example.refrigeratormanager.chat.ChatRequest;
+import com.example.refrigeratormanager.chat.ChatResponse;
+
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.Field;

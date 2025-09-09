@@ -1,11 +1,15 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
     <style name="Base.Theme.Refrigeratormanager" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Customize your light theme here. -->
+        <!-- 기본 StatusBar 색상 -->
         <item name="android:statusBarColor">#FFFFFF</item>
-        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
     </style>
 
     <style name="Theme.Refrigeratormanager" parent="Base.Theme.Refrigeratormanager" />
+
+    <!-- 특정 화면 전용 테마 (예: 빨간색) -->
+    <style name="Theme.Refrigeratormanager.Black" parent="Base.Theme.Refrigeratormanager">
+        <item name="colorPrimary">#000000</item>   <!-- 툴바 색 -->
+    </style>
 
 </resources>

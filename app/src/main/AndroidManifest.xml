@@ -27,7 +27,7 @@
             android:name=".MyInfoActivity"
             android:exported="false" />
         <activity
-            android:name=".ChatActivity"
+            android:name=".chat.ChatActivity"
             android:exported="false" />
         <activity
             android:name=".SearchActivity"
@@ -52,7 +52,9 @@
         </activity>
         <activity android:name=".RegisterActivity" />
         <activity android:name=".HomeActivity" />
-        <activity android:name=".recipe.RecipeDetailActivity" />
+        <activity
+            android:name=".recipe.RecipeDetailActivity"
+            android:theme="@style/Theme.Refrigeratormanager.Black"/>
     </application>
 
 </manifest>

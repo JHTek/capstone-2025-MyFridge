@@ -1,10 +1,12 @@
 package com.example.refrigeratormanager.recipe
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
+import com.example.refrigeratormanager.chat.ChatActivity
 import com.example.refrigeratormanager.databinding.ActivityRecipeDetailBinding
 
 class RecipeDetailActivity : AppCompatActivity() {
@@ -53,6 +55,15 @@ class RecipeDetailActivity : AppCompatActivity() {
             val adapter = InstructionAdapter(recipe.instructions)
             binding.recyclerViewInstructions.layoutManager = LinearLayoutManager(this)
             binding.recyclerViewInstructions.adapter = adapter
+        }
+        binding.fabChat.setOnClickListener {
+            startActivity(
+                Intent(this, ChatActivity::class.java).apply {
+                    // recipe의 ID 필드명에 맞게 사용: id 또는 recipeId
+                    putExtra("RECIPE_ID", recipe.id.toString())
+                    putExtra("RECIPE_TITLE", recipe.recipeName)
+                }
+            )
         }
     }
 }
