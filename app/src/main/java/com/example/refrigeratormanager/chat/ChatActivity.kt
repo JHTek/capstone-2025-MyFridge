@@ -43,7 +43,7 @@ class ChatActivity : AppCompatActivity() {
         setContentView(R.layout.activity_chat)
 
         // 1) 레시피 ID (상세 화면에서 putExtra로 전달하는 것을 권장)
-        recipeId = intent.getStringExtra("RECIPE_ID") ?: "352364"
+        recipeId = intent.getStringExtra("RECIPE_ID") ?: "1002689"
 
         // 2) UI
         val recyclerView = findViewById<RecyclerView>(R.id.recyclerView)
