@@ -93,7 +93,7 @@ wheels/
 /wandb/
 .installed.cfg
 *.egg
-yolo_ai/config.py
+config.py
 
 
 # PyInstaller
