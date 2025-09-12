@@ -128,6 +128,7 @@ object ProductRepository {
                                 ingredientsId = targetDto.ingredientsId,
                                 refrigeratorId = targetDto.refrigeratorId,
                                 ingredientsName = targetDto.ingredientsName,
+                                refrigeratorName = targetDto.refrigeratorName,
                                 quantity = targetDto.quantity,
                                 expirationDate = targetDto.expirationDate,
                                 storageLocation = targetDto.storageLocation,

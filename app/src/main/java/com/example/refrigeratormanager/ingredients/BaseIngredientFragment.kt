@@ -62,6 +62,7 @@ abstract class BaseIngredientFragment<VB : ViewBinding> : Fragment() {
                     Product(
                         ingredientsId = it.ingredientsId,
                         ingredientsName = it.ingredientsName,
+                        refrigeratorName = it.refrigeratorName,
                         quantity = it.quantity,
                         expirationDate = it.expirationDate,
                         storageLocation = it.storageLocation,

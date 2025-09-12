@@ -1,10 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#FFFFFF"
-    android:fitsSystemWindows="true">  <!-- 추가 -->
+    android:fitsSystemWindows="true">
+
     <!-- 상단 바 -->
     <LinearLayout
         android:id="@+id/topBar"
@@ -19,6 +21,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
 
+        <!-- 뒤로가기 버튼 -->
         <ImageButton
             android:id="@+id/btnback"
             android:layout_width="40dp"
@@ -28,6 +31,7 @@
             android:background="?android:attr/selectableItemBackgroundBorderless"
             android:contentDescription="뒤로 가기" />
 
+        <!-- 제목 -->
         <TextView
             android:id="@+id/tvNotificationTitle"
             android:layout_width="wrap_content"
@@ -37,6 +41,22 @@
             android:textSize="20sp"
             android:textStyle="bold"
             android:layout_marginStart="12dp"/>
+
+        <!-- 공간 채우기 -->
+        <View
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"/>
+
+        <!-- 전체 삭제 버튼 -->
+        <Button
+            android:id="@+id/btnClearAll"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="전체 삭제"
+            android:textColor="#FFFFFF"
+            android:background="@android:color/transparent"
+            android:padding="8dp"/>
     </LinearLayout>
 
     <!-- 알림 목록 RecyclerView -->
@@ -49,4 +69,5 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -19,14 +19,12 @@ class HomeActivity : AppCompatActivity() {
         binding = ActivityHomeBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        // 기본 Fragment 설정
         if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction()
                 .replace(R.id.fragmentContainer, MainHomeFragment())
                 .commit()
         }
 
-        // 네비게이션 바 클릭 이벤트
         binding.bottomNavigationView.setOnItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.nav_refrigerator -> replaceFragment(RefrigeratorListFragment())
@@ -37,16 +35,23 @@ class HomeActivity : AppCompatActivity() {
             true
         }
 
-        // 토큰 가져오기
         val ftoken = getTokenFromSharedPrefs()
         val token = "Bearer $ftoken"
 
-        // 냉장고 목록 불러오기
         if (token != null) {
             viewModel.loadRefrigerators(token)
         } else {
-            Toast.makeText(this, "로그인 정보가 없습니다. 다시 로그인해주세요.", Toast.LENGTH_SHORT).show()
-            finish() // HomeActivity 종료
+            Toast.makeText(this, "로그인 정보가 없습니다.", Toast.LENGTH_SHORT).show()
+            finish()
+            return
+        }
+
+        // 앱 진입 즉시 알림 + 주기 알림
+        NotificationScheduler.runImmediate(this)
+        val prefs = getSharedPreferences("app_preferences", MODE_PRIVATE)
+        if (prefs.getBoolean("ALERT_ENABLED", true)) {
+            val interval = prefs.getLong("ALARM_INTERVAL_HOURS", 6L)
+            NotificationScheduler.schedulePeriodic(this, interval)
         }
     }
 
@@ -57,8 +62,6 @@ class HomeActivity : AppCompatActivity() {
     }
 
     private fun getTokenFromSharedPrefs(): String? {
-        val sharedPreferences = getSharedPreferences("app_preferences", MODE_PRIVATE)
-        return sharedPreferences.getString("JWT_TOKEN", null)
+        return getSharedPreferences("app_preferences", MODE_PRIVATE).getString("JWT_TOKEN", null)
     }
 }
-
