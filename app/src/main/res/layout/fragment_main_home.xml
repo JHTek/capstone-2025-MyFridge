@@ -10,12 +10,9 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        >
+        android:orientation="vertical">
 
         <!-- Title -->
-
-        <!-- 간편 사용 (바코드, 카메라, 음성) -->
         <TextView
             android:id="@+id/tvTitle"
             android:layout_width="wrap_content"
@@ -25,7 +22,7 @@
             android:textSize="28dp"
             android:textStyle="bold" />
 
-        <!-- 유통기한 임박 타이틀 + 더보기 버튼 한 줄에 배치 -->
+        <!-- 간편 사용 (바코드, 카메라, 음성) -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -106,6 +103,7 @@
             </LinearLayout>
         </LinearLayout>
 
+        <!-- 유통기한 임박 타이틀 + 더보기 버튼 한 줄 -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -131,27 +129,18 @@
                 android:textColor="@color/gray" />
         </LinearLayout>
 
-        <!-- 유통기한 임박 이미지 영역 -->
+        <!-- 유통기한 임박 상품 미리보기 -->
+
+        <!-- 체크리스트 타이틀 + 추가하기 버튼 한 줄 -->
         <LinearLayout
+            android:id="@+id/expirationPreviewContainer"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="150dp"
-                android:layout_weight="1"
-                android:text="추후 추가 예정"
-                android:textColor="#FF0000"
-                android:scaleType="centerCrop"
-                android:layout_marginStart="8dp" />
+            android:layout_height="120dp"
+            android:orientation="vertical"
+            android:paddingBottom="8dp">
+            <!-- 서버에서 가져온 항목이 여기 동적으로 추가됨 -->
         </LinearLayout>
 
-
-
-        <!-- 체크리스트 타이틀 + 추가하기 버튼 한 줄에 배치 -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -182,7 +171,6 @@
             android:layout_height="220dp"
             android:overScrollMode="ifContentScrolls"
             android:fillViewport="true">
-
 
             <LinearLayout
                 android:id="@+id/checklistPreviewContainer"

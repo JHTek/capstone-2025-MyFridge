@@ -72,7 +72,7 @@ class AlarmWorker(
             val api = retrofit.create(ExpirationApi::class.java)
 
             val productList: List<Product> = try {
-                api.getExpiringProducts(userId, alertDays)
+                api.getExpiringProducts("Bearer $token", userId, alertDays)
             } catch (e: Exception) {
                 return@withContext Result.retry()
             }

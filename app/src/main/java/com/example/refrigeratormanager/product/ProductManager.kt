@@ -1,7 +1,7 @@
 package com.example.refrigeratormanager.product
 
 object ProductManager {
-    private val productList = mutableListOf<Product>()
+    val productList = mutableListOf<Product>()
     private val productMap = mutableMapOf<Int, List<Product>>() // key = refrigeratorId
 
     fun updateProducts(refrigeratorId: Int, products: List<Product>) {
