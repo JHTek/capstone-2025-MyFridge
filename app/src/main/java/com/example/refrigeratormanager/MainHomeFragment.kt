@@ -33,6 +33,12 @@ import java.util.concurrent.TimeUnit
 import android.speech.RecognizerIntent
 import android.speech.RecognitionListener
 import android.speech.SpeechRecognizer
+import android.util.Log
+import com.example.refrigeratormanager.product.ProductUploadFragment
+import com.example.refrigeratormanager.voiceAndgpt.ChatGPTApi
+import com.example.refrigeratormanager.voiceAndgpt.chatGPTDTO.ChatRequest
+import com.example.refrigeratormanager.voiceAndgpt.chatGPTDTO.Message
+import org.json.JSONObject
 
 class MainHomeFragment : Fragment() {
 
@@ -271,7 +277,76 @@ class MainHomeFragment : Fragment() {
     }
 
     private fun callChatGPT(ingredientInput: String) {
-        // ChatGPT 호출 코드
+        val retrofit = Retrofit.Builder()
+            .baseUrl("https://api.openai.com/")
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+
+        val api = retrofit.create(ChatGPTApi::class.java)
+
+        val messages = listOf(
+            Message("system", "너는 식재료 등록을 도와주는 어시스턴트야. 사용자의 문장에서 식재료명과 갯수를 JSON 형태로 추출해줘. 예: '감자 3개, 당근 2개 샀어' → {\"감자\": 3, \"당근\": 2}. 다른 말은 절대 하지 마."),
+            Message("user", ingredientInput)
+        )
+
+        val request = ChatRequest(messages = messages)
+
+        lifecycleScope.launch {
+            try {
+                val response = api.getChatResponse("Bearer ${BuildConfig.OPENAI_API_KEY}", request)
+                val reply = response.choices.firstOrNull()?.message?.content
+
+                if (reply != null) {
+                    val parsedMap = parseServerResponse(reply)
+                    if (parsedMap.isNotEmpty()) {
+                        dismissListeningDialog() // ✅ 응답 성공 시 대화상자 닫기
+                        moveToProductUpload(parsedMap)
+                    } else {
+                        dismissListeningDialog()
+                        showResponseDialog("GPT 응답 실패", "JSON 파싱 실패: $reply")
+                    }
+                }
+
+            } catch (e: Exception) {
+                dismissListeningDialog()
+                Toast.makeText(requireContext(), "GPT 호출 실패: ${e.message}", Toast.LENGTH_SHORT).show()
+            }
+
+        }
+    }
+
+    private fun parseServerResponse(response: String): Map<String, Int> {
+        return try {
+            val jsonObject = JSONObject(response)
+            val resultMap = mutableMapOf<String, Int>()
+            jsonObject.keys().forEach { key ->
+                resultMap[key] = jsonObject.getInt(key)
+            }
+            resultMap
+        } catch (e: Exception) {
+            Log.e("MainHomeFragment", "JSON 파싱 오류", e)
+            emptyMap()
+        }
+    }
+
+    private fun showResponseDialog(title: String, message: String, onDismiss: (() -> Unit)? = null) {
+        AlertDialog.Builder(requireContext())
+            .setTitle(title)
+            .setMessage(message)
+            .setPositiveButton("확인") { _, _ ->
+                onDismiss?.invoke()
+            }
+            .show()
+    }
+
+    private fun moveToProductUpload(data: Map<String, Int>) {
+        val fragment = ProductUploadFragment().apply {
+            arguments = Bundle().apply {
+                putSerializable("productData", HashMap(data)) // Serializable로 전달
+            }
+        }
+
+        fragment.show(parentFragmentManager, "ProductUploadFragment")// ChatGPT 호출 코드
     }
 
     private fun showListeningDialog() {
