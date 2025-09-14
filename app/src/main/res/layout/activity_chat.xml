@@ -2,28 +2,29 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true">
 
-    <!-- 🔙 뒤로가기 버튼 -->
+    <!-- 🔙 뒤로가기 버튼 (살짝 내려줌) -->
     <ImageButton
         android:id="@+id/btnBack"
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:layout_alignParentStart="true"
-        android:layout_margin="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="16dp"
         android:background="?attr/selectableItemBackgroundBorderless"
         android:src="@android:drawable/ic_menu_revert"
         android:contentDescription="뒤로가기"
         app:tint="@android:color/black" />
 
-    <!-- 서버 응답을 표시할 TextView -->
+    <!-- 서버 응답 -->
     <TextView
         android:id="@+id/responseText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="응답이 여기에 표시됩니다."
         android:textSize="16sp"
-        android:padding="8dp"
         android:layout_below="@id/btnBack"
         android:layout_centerHorizontal="true"
         android:background="@android:color/darker_gray"
@@ -32,7 +33,7 @@
         android:paddingVertical="8dp"
         android:visibility="gone"/>
 
-    <!-- 채팅 목록을 표시할 RecyclerView -->
+    <!-- 채팅 목록 -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"
         android:layout_width="match_parent"
@@ -40,14 +41,16 @@
         android:layout_below="@id/responseText"
         android:layout_above="@id/messageLayout"
         android:padding="8dp"
+        android:paddingBottom="72dp"
         android:clipToPadding="false"
         android:scrollbars="vertical"/>
 
-    <!-- 메시지 입력창 -->
+    <!-- 메시지 입력창 (하단 고정) -->
     <LinearLayout
         android:id="@+id/messageLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:minHeight="56dp"
         android:layout_alignParentBottom="true"
         android:orientation="horizontal"
         android:padding="8dp"

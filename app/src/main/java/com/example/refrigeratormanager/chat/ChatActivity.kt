@@ -91,7 +91,7 @@ class ChatActivity : AppCompatActivity() {
             "http://10.0.2.2:5000/"
         } else {
             // 실제 기기에서 테스트 시, PC의 로컬 IP로 교체하세요 (Flask 로그에 표시된 IP)
-            "http://192.168.25.58:5000/"
+            "http://192.168.45.193:5000/"
         }
     }
 

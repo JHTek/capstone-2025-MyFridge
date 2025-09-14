@@ -145,7 +145,7 @@ class CameraFragment : Fragment() {
         val multipartBody = MultipartBody.Part.createFormData("image", photoFile.name, requestBody)
 
         val retrofit = Retrofit.Builder()
-            .baseUrl("https://36db-39-115-67-181.ngrok-free.app/") // 🔹 서버 URL 설정*****************************
+            .baseUrl("http://192.168.45.193:5000/") // 🔹 서버 URL 설정**************https://36db-39-115-67-181.ngrok-free.app/***************
             .addConverterFactory(GsonConverterFactory.create())
             .build()
 
@@ -158,10 +158,11 @@ class CameraFragment : Fragment() {
                         serverResponse = jsonResponse  // ✅ 서버 응답 저장
                         Log.d("CameraFragment", "서버 응답: $serverResponse")
 
-                        showResponseDialog("업로드 성공", serverResponse!!) {
-                            // ✅ 서버 응답과 함께 페이지 이동
-                            moveToProductUpload(serverResponse!!)
-                        }
+//                        showResponseDialog("업로드 성공", serverResponse!!) {
+//                            // ✅ 서버 응답과 함께 페이지 이동
+//                            moveToProductUpload(serverResponse!!)
+//                        }
+                        moveToProductUpload(serverResponse!!)
                     }
                 } else {
                     Log.e("CameraFragment", "서버 응답 실패: ${response.code()}")
