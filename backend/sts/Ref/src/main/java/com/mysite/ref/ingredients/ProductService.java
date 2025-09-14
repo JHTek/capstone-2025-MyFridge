@@ -34,6 +34,7 @@ public class ProductService {
 	        return new ProductDto(
 	                ingredient.getIngredientsId(),
 	                ingredient.getRefrigerator().getRefrigeratorId(),
+	                ingredient.getRefrigerator().getRefrigeratorName(),// 냉장고 이름 추가
 	                ingredient.getIngredientsName(),
 	                ingredient.getQuantity(),
 	                ingredient.getExpirationDate().toString(), 

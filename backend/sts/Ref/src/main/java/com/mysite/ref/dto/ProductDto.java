@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 public class ProductDto {
     private int ingredientsId;
     private int refrigeratorId;
+    private String refrigeratorName;
     private String ingredientsName;
     private int quantity;
     private String expirationDate;
